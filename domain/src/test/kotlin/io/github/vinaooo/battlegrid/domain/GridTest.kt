@@ -6,6 +6,7 @@ import io.github.vinaooo.battlegrid.domain.model.Orientation
 import io.github.vinaooo.battlegrid.domain.model.Ship
 import io.github.vinaooo.battlegrid.domain.model.ShipClass
 import io.github.vinaooo.battlegrid.domain.model.ShotResult
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 
@@ -66,6 +67,13 @@ class GridTest {
         sunk.hits shouldBe 2
         sunk.untried.size shouldBe 97
         sunk.isTried(c(1, 0)) shouldBe true
+    }
+
+    @Test
+    fun `a grid holds one slot per class of its board's fleet, each its own class, shots on the grid`() {
+        shouldThrow<IllegalArgumentException> { Grid(BoardSize.EIGHT, rowFleet(BoardSize.TEN)) }
+        shouldThrow<IllegalArgumentException> { Grid(BoardSize.EIGHT, rowFleet(BoardSize.EIGHT).reversed()) }
+        shouldThrow<IllegalArgumentException> { Grid(BoardSize.EIGHT, rowFleet(BoardSize.EIGHT), listOf(c(8, 0))) }
     }
 
     @Test

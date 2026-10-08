@@ -34,6 +34,10 @@ data class GameState(
     val elapsedSeconds: Long = 0,
     val actions: Int = 0,
 ) {
+    init {
+        require(player.size == mode.size && enemy.size == mode.size) { "Grids don't match the mode's board" }
+    }
+
     val isOver: Boolean get() = phase is Phase.Over
 
     val isBattle: Boolean get() = phase == Phase.Battle
