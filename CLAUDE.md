@@ -79,7 +79,9 @@ and their defaults, is `PLAN.md`.
 - The ViewModel's AI loop reads the latest state before every shot; a new game, restart or resign cancels it
   (`pending`). Pauses: 600 ms before each AI shot and between a salvo's results (both sides); a salvo is in the
   session at once, the newest `hiddenShots` held back and drawn as marks until shown. Pass-and-play: the result shows
-  1 s, then the cover; after it lifts, the shooter's own grid shows big for 1.5 s.
+  1 s, then the cover.
+- The grids never swap (user's rule): the target is always big, the own grid small above it in portrait (one
+  TalkBack item with a summary); landscape shows both at the same size.
 - The cover replaces the whole screen (not drawn over it), so TalkBack and the bug-report screenshot can't reach the
   hidden grids.
 - Placement drag: the drop uses the drag-start point plus the raw travel; only the drawn offset adds the touch slop.

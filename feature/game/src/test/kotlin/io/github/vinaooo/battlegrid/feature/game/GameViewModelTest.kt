@@ -175,7 +175,6 @@ class GameViewModelTest {
             vm.uiState.value.announcement shouldBe Announcement.Shot(Side.PLAYER, water, ShotResult.MISS, null)
             played shouldBe listOf("miss")
             vm.uiState.value.aiFiring shouldBe true
-            vm.uiState.value.ownBig shouldBe true
             vm.uiState.value.canFire shouldBe false
 
             advanceTimeBy(AI_PAUSE - 1)
@@ -185,7 +184,6 @@ class GameViewModelTest {
             advanceUntilIdle()
             vm.state().toMove shouldBe Side.PLAYER
             vm.uiState.value.aiFiring shouldBe false
-            vm.uiState.value.ownBig shouldBe false
             savedGames.saved.shouldNotBeNull().state shouldBe vm.state()
         }
 
@@ -339,10 +337,6 @@ class GameViewModelTest {
         vm.uiState.value.covered shouldBe true
         vm.onIntent(GameIntent.Uncover)
         vm.uiState.value.viewer shouldBe Side.PLAYER
-        // First a look at their own grid, then the target.
-        vm.uiState.value.ownBig shouldBe true
-        advanceTimeBy(OWN_GRID_LOOK + 1)
-        vm.uiState.value.ownBig shouldBe false
         vm.uiState.value.canFire shouldBe true
 
         val water = vm.state().enemy.untried.first { vm.state().enemy.shipAt(it) == null }
@@ -362,7 +356,6 @@ class GameViewModelTest {
         vm.onIntent(GameIntent.Uncover)
         vm.toBattle()
         vm.onIntent(GameIntent.Uncover)
-        advanceTimeBy(OWN_GRID_LOOK + 1)
         vm.onIntent(GameIntent.Hint)
         vm.state().hintsUsed shouldBe 0
         vm.onIntent(GameIntent.Resign)
@@ -371,18 +364,8 @@ class GameViewModelTest {
         stats.stats.value shouldBe emptyMap()
     }
 
-    @Test
-    fun `swapping the grids is the player's choice`() = runTest(dispatcher) {
-        val vm = viewModel().toBattle()
-        vm.onIntent(GameIntent.SwapGrids)
-        vm.uiState.value.ownBig shouldBe true
-        vm.onIntent(GameIntent.SwapGrids)
-        vm.uiState.value.ownBig shouldBe false
-    }
-
     private companion object {
         const val AI_PAUSE = 600L
-        const val OWN_GRID_LOOK = 1_500L
         const val RESULT_LOOK = 1_000L
     }
 }

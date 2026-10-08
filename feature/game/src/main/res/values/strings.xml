@@ -74,7 +74,6 @@
     <string name="cell_hint">hint</string>
     <string name="your_fleet">Your fleet, %1$d of %2$d ships afloat</string>
     <string name="enemy_waters">Enemy waters, %1$d of %2$d ships afloat</string>
-    <string name="swap_grids">Show it big</string>
     <string name="shot_miss">Miss at %1$s</string>
     <string name="shot_hit">Hit at %1$s</string>
     <string name="shot_sunk">%1$s sunk at %2$s</string>

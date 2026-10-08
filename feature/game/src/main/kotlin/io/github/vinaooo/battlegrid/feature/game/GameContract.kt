@@ -17,8 +17,6 @@ data class GameUiState(
     /** The newest shots at [revealing]'s grid not shown yet: a salvo's results appear one by one. */
     val hiddenShots: Int = 0,
     val revealing: Side? = null,
-    /** Portrait: the viewer's own grid is the big one (tapped, or while the opponent fires). */
-    val ownBig: Boolean = false,
     /** Pass-and-play: the screen is covered until the next player taps. */
     val covered: Boolean = false,
     val announcement: Announcement? = null,
@@ -67,9 +65,6 @@ sealed interface GameIntent {
     data object FireSalvo : GameIntent
 
     data object Hint : GameIntent
-
-    /** Portrait: swaps which grid is big. */
-    data object SwapGrids : GameIntent
 
     /** Pass-and-play: the next player lifts the cover. */
     data object Uncover : GameIntent

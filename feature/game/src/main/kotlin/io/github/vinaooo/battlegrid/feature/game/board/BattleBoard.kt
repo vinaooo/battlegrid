@@ -1,6 +1,5 @@
 package io.github.vinaooo.battlegrid.feature.game.board
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.BoxWithConstraintsScope
@@ -11,7 +10,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
@@ -25,45 +23,36 @@ import io.github.vinaooo.battlegrid.feature.game.ui.cellResult
 import io.github.vinaooo.battlegrid.feature.game.ui.shipName
 
 /**
- * The battle: the target grid and the viewer's own. Landscape shows both side by side; portrait shows one big and
- * the other small above it, and a tap on the small one swaps them at once. Only the big
- * target grid takes shots.
+ * The battle: the target grid, which takes the shots, and the viewer's own. Landscape shows both side by side at the
+ * same size; portrait shows the target big and the own grid small above it (one TalkBack item with a summary).
  */
 @Composable
-internal fun BattleBoard(
-    ui: GameUiState,
-    landscape: Boolean,
-    onTap: (Coord) -> Unit,
-    onSwap: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
+internal fun BattleBoard(ui: GameUiState, landscape: Boolean, onTap: (Coord) -> Unit, modifier: Modifier = Modifier) {
     val state = ui.session?.state ?: return
     val target = state.gridOf(ui.viewer.other)
     val own = state.gridOf(ui.viewer)
     val (targetView, ownView) = views(ui)
-    val ownBig = ui.ownBig && !landscape
-    val swapLabel = stringResource(R.string.swap_grids)
     BoxWithConstraints(modifier) {
+        // The grids never trade places (user's choice): the target is always the big one.
         val slots = slots(landscape)
-        // The swap is instant: the grids change places without moving across the screen (user's choice).
-        val targetSlot = if (ownBig) slots.mini else slots.big
-        val ownSlot = if (ownBig) slots.big else slots.mini
-        val targetSmall = ownBig
-        val ownSmall = !ownBig && !landscape
-        val targetSummary = stringResource(R.string.enemy_waters, target.shipsAfloat, target.ships.size)
-        Box(targetSlot.place().let { if (targetSmall) it.small(targetSummary, swapLabel, onSwap) else it }) {
+        Box(slots.big.place()) {
             SeaGrid(
                 targetView,
-                Modifier.size(targetSlot.size),
-                onTap = if (ui.canFire && !targetSmall) onTap else null,
+                Modifier.size(slots.big.size),
+                onTap = if (ui.canFire) onTap else null,
                 tappable = { !target.isTried(it) },
-                nodes = !targetSmall,
                 cellDescription = { targetCell(targetView, it) },
             )
         }
         val ownSummary = stringResource(R.string.your_fleet, own.shipsAfloat, own.ships.size)
-        Box(ownSlot.place().let { if (ownSmall) it.small(ownSummary, swapLabel, onSwap) else it }) {
-            SeaGrid(ownView, Modifier.size(ownSlot.size), nodes = !ownSmall, cellDescription = { ownCell(ownView, it) })
+        Box(
+            slots.mini.place().let {
+                if (landscape) it else it.clearAndSetSemantics { contentDescription = ownSummary }
+            },
+        ) {
+            SeaGrid(ownView, Modifier.size(slots.mini.size), nodes = landscape, cellDescription = {
+                ownCell(ownView, it)
+            })
         }
     }
 }
@@ -104,16 +93,6 @@ private fun BoxWithConstraintsScope.slots(landscape: Boolean): Slots {
         )
     }
 }
-
-/** The small grid: one TalkBack node with a summary, and a tap (or double tap) shows it big. */
-private fun Modifier.small(summary: String, swapLabel: String, onSwap: () -> Unit): Modifier =
-    clickable(onClick = onSwap).clearAndSetSemantics {
-        contentDescription = summary
-        onClick(swapLabel) {
-            onSwap()
-            true
-        }
-    }
 
 /** A target cell for TalkBack: untried, marked, a hint, or what a shot found. */
 @Composable
