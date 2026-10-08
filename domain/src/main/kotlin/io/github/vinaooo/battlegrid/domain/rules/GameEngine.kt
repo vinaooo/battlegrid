@@ -42,6 +42,7 @@ class GameEngine {
         is Move.Fire -> FireRule.isLegal(state, move)
         is Move.MarkSalvo -> MarkSalvoRule.isLegal(state, move)
         Move.FireSalvo -> FireSalvoRule.isLegal(state, Move.FireSalvo)
+        is Move.ShowHint -> ShowHintRule.isLegal(state, move)
         is Move.Resign -> ResignRule.isLegal(state, move)
     }
 
@@ -55,12 +56,13 @@ class GameEngine {
             is Move.Fire -> FireRule.apply(state, move)
             is Move.MarkSalvo -> MarkSalvoRule.apply(state, move)
             Move.FireSalvo -> FireSalvoRule.apply(state, Move.FireSalvo)
+            is Move.ShowHint -> ShowHintRule.apply(state, move)
             is Move.Resign -> ResignRule.apply(state, move)
         }
         return MoveOutcome.Applied(next)
     }
 
-    /** Every legal move but [Move.SetFleet] (any whole valid fleet) and [Move.Resign]. */
+    /** Every legal move but [Move.SetFleet] (any whole valid fleet), [Move.ShowHint] and [Move.Resign]. */
     fun legalMoves(state: GameState): List<Move> = when (val phase = state.phase) {
         is Phase.Placement -> placementMoves(state.gridOf(phase.side))
         Phase.Battle -> battleMoves(state)

@@ -17,8 +17,8 @@ sealed interface Phase {
 
 /**
  * A game: its mode, both grids, the phase, whose turn it is ([toMove] fires at the other side's grid), who fired
- * first, the cells marked for the next salvo, hints used, battle time, and [actions] (every applied battle move,
- * which seeds the AI's random choices).
+ * first, the cells marked for the next salvo, hints used and the one shown until the next shot, battle time, and
+ * [actions] (every applied battle move, which seeds the AI's random choices).
  */
 @Serializable
 data class GameState(
@@ -30,6 +30,7 @@ data class GameState(
     val firstMover: Side,
     val salvoMarks: List<Coord> = emptyList(),
     val hintsUsed: Int = 0,
+    val hint: List<Coord> = emptyList(),
     val elapsedSeconds: Long = 0,
     val actions: Int = 0,
 ) {
@@ -75,6 +76,9 @@ sealed interface Move {
 
     /** Fires every marked cell. */
     data object FireSalvo : Move
+
+    /** Shows a hint's cells ([io.github.vinaooo.battlegrid.domain.hint.HintEngine]) to the player. */
+    data class ShowHint(val cells: List<Coord>) : Move
 
     /** [side] gives up the battle. */
     data class Resign(val side: Side) : Move

@@ -1,10 +1,15 @@
 package io.github.vinaooo.battlegrid.domain
 
+import io.github.vinaooo.battlegrid.domain.ai.aiFor
+import io.github.vinaooo.battlegrid.domain.ai.aiRandom
+import io.github.vinaooo.battlegrid.domain.model.FiringMode
 import io.github.vinaooo.battlegrid.domain.model.GameMode
 import io.github.vinaooo.battlegrid.domain.model.GameState
 import io.github.vinaooo.battlegrid.domain.model.Move
+import io.github.vinaooo.battlegrid.domain.model.Opponent
 import io.github.vinaooo.battlegrid.domain.model.Phase
 import io.github.vinaooo.battlegrid.domain.model.Side
+import io.github.vinaooo.battlegrid.domain.placement.RandomFleetPlacer
 import io.github.vinaooo.battlegrid.domain.rules.GameEngine
 import io.github.vinaooo.battlegrid.domain.session.GameSession
 import io.kotest.matchers.shouldBe
@@ -87,6 +92,34 @@ class GameInvariantsPropertyTest {
             randomGame(mode, Side.ENEMY, seed).forEach {
                 GameSession.codec.decode(GameSession.codec.encode(it)) shouldBe it
             }
+        }
+    }
+
+    @Test
+    fun `AIs of every level only ever make legal moves, through whole games in every mode`() = runTest {
+        val vsAi = GameMode.ALL.filter { it.isVsAi }
+        checkAll(SMALL_ITERATIONS, Arb.element(vsAi), Arb.enum<Opponent>(), Arb.long()) { mode, rival, seed ->
+            val players = mapOf(
+                Side.ENEMY to aiFor(mode.opponent),
+                Side.PLAYER to aiFor(rival.takeIf { it != Opponent.TWO_PLAYER } ?: Opponent.EASY),
+            )
+            var state = engine.play(
+                engine.newGame(mode, Side.PLAYER, RandomFleetPlacer.place(mode.size, Random(seed))),
+                Move.SetFleet(RandomFleetPlacer.place(mode.size, Random(seed + 1))),
+                Move.ConfirmFleet,
+            )
+            while (!state.isOver) {
+                val shots = players.getValue(state.toMove).shots(state, aiRandom(seed, state))
+                val moves = if (mode.firing ==
+                    FiringMode.SALVO
+                ) {
+                    shots.map(Move::MarkSalvo) + Move.FireSalvo
+                } else {
+                    shots.map(Move::Fire)
+                }
+                state = engine.play(state, *moves.toTypedArray())
+            }
+            state.gridOf(state.winner!!.other).isFleetSunk shouldBe true
         }
     }
 
