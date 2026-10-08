@@ -45,8 +45,11 @@ import io.github.vinaooo.battlegrid.feature.game.GameIntent
 import io.github.vinaooo.battlegrid.feature.game.GameUiState
 import io.github.vinaooo.battlegrid.feature.game.GameViewModel
 import io.github.vinaooo.battlegrid.feature.game.R
+import io.github.vinaooo.battlegrid.feature.game.REPORT_TARGET
 import io.github.vinaooo.battlegrid.feature.game.board.BattleBoard
 import io.github.vinaooo.battlegrid.feature.game.board.PlacementBoard
+import io.github.vinaooo.battlegrid.feature.game.gameReport
+import io.github.vinaooo.vinkit.bugreport.ReportTarget
 import io.github.vinaooo.vinkit.core.formatElapsed
 import io.github.vinaooo.vinkit.shell.FrameInfo
 import io.github.vinaooo.vinkit.shell.GameFrame
@@ -75,7 +78,7 @@ fun GameRoute(
         viewModel.onIntent(GameIntent.Resume)
         onPauseOrDispose { viewModel.onIntent(GameIntent.Pause) }
     }
-    GameScreen(uiState, viewModel::onIntent, modifier, onOpenScores, onOpenSettings)
+    GameScreen(uiState, viewModel::onIntent, modifier, onOpenScores, onOpenSettings, REPORT_TARGET)
 }
 
 @Composable
@@ -85,6 +88,7 @@ fun GameScreen(
     modifier: Modifier = Modifier,
     onOpenScores: (() -> Unit)? = null,
     onOpenSettings: (() -> Unit)? = null,
+    reportTarget: ReportTarget? = null,
 ) {
     val state = uiState.session?.state
     val vsAi = state?.mode?.isVsAi ?: true
@@ -97,6 +101,8 @@ fun GameScreen(
         announcement = uiState.announcement?.let { announcementText(it, vsAi) },
         announcementSequence = uiState.announcementSequence,
         modifier = modifier,
+        reportTarget = reportTarget,
+        gameReport = { gameReport(uiState) },
     ) { reportBug ->
         GameFrame(
             settings = uiState.settings,

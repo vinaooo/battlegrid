@@ -91,6 +91,19 @@ and their defaults, is `PLAN.md`.
 - Known, to check with TalkBack on: on the Moto, `uiautomator` reports the target grid's cell nodes about a cell off
   (touches and Robolectric bounds are right; the own grid's nodes are right).
 
+## App shell (`:app`)
+
+- `BattleGridApp`: a NavHost with type-safe routes (game, Scores, Settings). Only the game route carries the banner
+  (a `Column`: the game takes `weight(1f)` and consumes the bottom navigation-bar inset, the banner pads for it).
+- Ads: vinkit's `AdMobBanner` and `DefaultAdConsent` (`di/AdsModule`), Google's test IDs until real ones are set;
+  consent is gathered once per launch in `MainActivity`. App tests swap them for fakes (`src/sharedTest`,
+  `FakeAdsModule`).
+- Scores: a tab per board size, a section per firing mode × opponent, ranked `LOWEST_POINTS` (shots + 5 per hint);
+  pass-and-play isn't recorded. Settings: Board and Firing (`Choice`), Opponent (`IconChoice`); a change during a
+  battle asks first (`NewGameConfirmDialog`), during placement it applies at once.
+- Bug report: `ReportTarget("vrpedrinho+battlegrid@gmail.com", "vinaooo/battlegrid")`, with the settings, a game
+  line, the `GameCodec` state and `game.json`.
+
 ## Git
 
 Only `master` is long-lived: branch from it and open PRs against it; the user merges with merge commits. One PR per

@@ -89,4 +89,21 @@
     <string name="move_right">Move right</string>
     <string name="rotate">Rotate</string>
     <string name="place_on_grid">Place on the grid</string>
+
+    <!-- Settings and Scores -->
+    <string name="section_game">Game</string>
+    <string name="board">Board</string>
+    <string name="firing">Firing</string>
+    <string name="opponent">Opponent</string>
+    <string name="opponent_easy_note">Fires at random</string>
+    <string name="opponent_medium_note">Fires at random until it hits, then sinks that ship</string>
+    <string name="opponent_hard_note">Aims where ships can still be, on a checkerboard</string>
+    <string name="opponent_two_player_note">Two people on this phone, passing it between turns</string>
+    <string name="new_game_not_counted">This will start a new game. The current game will be lost.</string>
+    <string name="privacy_policy_url">https://vinaooo.github.io/battlegrid/privacy.html#en</string>
+    <string name="firing_and_opponent" translatable="false">%1$s · %2$s</string>
+    <plurals name="hints_used">
+        <item quantity="one">%d hint</item>
+        <item quantity="other">%d hints</item>
+    </plurals>
 </resources>
