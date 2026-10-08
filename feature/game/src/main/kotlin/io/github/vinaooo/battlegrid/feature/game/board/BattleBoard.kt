@@ -1,18 +1,12 @@
 package io.github.vinaooo.battlegrid.feature.game.board
 
-import androidx.compose.animation.core.VectorConverter
-import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.animateValueAsState
-import androidx.compose.animation.core.snap
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.BoxWithConstraintsScope
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
@@ -32,7 +26,7 @@ import io.github.vinaooo.battlegrid.feature.game.ui.shipName
 
 /**
  * The battle: the target grid and the viewer's own. Landscape shows both side by side; portrait shows one big and
- * the other small above it, and a tap on the small one swaps them with the motion scheme's spring. Only the big
+ * the other small above it, and a tap on the small one swaps them at once. Only the big
  * target grid takes shots.
  */
 @Composable
@@ -51,8 +45,9 @@ internal fun BattleBoard(
     val swapLabel = stringResource(R.string.swap_grids)
     BoxWithConstraints(modifier) {
         val slots = slots(landscape)
-        val targetSlot = animatedSlot(if (ownBig) slots.mini else slots.big, landscape, "target")
-        val ownSlot = animatedSlot(if (ownBig) slots.big else slots.mini, landscape, "own")
+        // The swap is instant: the grids change places without moving across the screen (user's choice).
+        val targetSlot = if (ownBig) slots.mini else slots.big
+        val ownSlot = if (ownBig) slots.big else slots.mini
         val targetSmall = ownBig
         val ownSmall = !ownBig && !landscape
         val targetSummary = stringResource(R.string.enemy_waters, target.shipsAfloat, target.ships.size)
@@ -108,23 +103,6 @@ private fun BoxWithConstraintsScope.slots(landscape: Boolean): Slots {
             Slot(DpOffset((maxWidth - mini) / 2, top), mini),
         )
     }
-}
-
-/** [slot], reached with the motion scheme's spring in portrait (the swap); landscape has nothing to swap. */
-@Composable
-private fun animatedSlot(slot: Slot, landscape: Boolean, label: String): Slot {
-    val size by animateDpAsState(
-        slot.size,
-        if (landscape) snap() else MaterialTheme.motionScheme.defaultSpatialSpec(),
-        label = "$label size",
-    )
-    val at by animateValueAsState(
-        slot.at,
-        DpOffset.VectorConverter,
-        if (landscape) snap() else MaterialTheme.motionScheme.defaultSpatialSpec(),
-        label = "$label place",
-    )
-    return Slot(at, size)
 }
 
 /** The small grid: one TalkBack node with a summary, and a tap (or double tap) shows it big. */
