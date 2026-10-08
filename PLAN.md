@@ -139,11 +139,11 @@ No `build-logic`, no own catalog, no `:feature:scores` / `:feature:settings`: vi
 2. vinkit release (gaps above), then domain core: fleet, grids, placement, engine with the three firing modes,
    scoring, session, codec.
 3. Domain extras: fleet placer, AI Easy / Medium / Hard + benchmark, hint engine.
-4. Data: saved game file, settings keys, daily and achievement keys, vinkit settings + scores wiring.
+4. Data: use cases, saved game file, settings keys, vinkit settings + scores wiring.
 5. Game screen: placement (drag, rotate, Random, Start), battle (two grids, swap, Salvo marks), pass-and-play
    covers, end dialog, feedback, TalkBack.
 6. Settings, Scores (with the Achievements tab), navigation, ads placeholder, bug report.
-7. Daily challenge, achievements, How-to-play screen, game sounds.
+7. Daily challenge and achievements (with their DataStore keys), How-to-play screen, game sounds.
 8. Adaptive layouts, pt-BR, accessibility pass, screenshots, launcher icon.
 9. Release prep: signing, Play workflow (off), privacy policy, store kit and checklist.
 

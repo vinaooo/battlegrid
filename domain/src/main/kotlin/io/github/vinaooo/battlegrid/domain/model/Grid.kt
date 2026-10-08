@@ -8,6 +8,17 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class Grid(val size: BoardSize, val ships: List<Ship?>, val shots: List<Coord> = emptyList()) {
+    init {
+        // A save edited or written by another version must not load as a broken grid.
+        require(ships.size == size.fleet.size) { "${ships.size} ship slots on a ${size.name} grid" }
+        require(
+            ships.withIndex().all { (i, ship) ->
+                ship == null || ship.type == size.fleet[i]
+            },
+        ) { "Wrong ship class" }
+        require(shots.all { it.isOn(size.side) }) { "A shot off the grid" }
+    }
+
     val isFleetComplete: Boolean get() = ships.all { it != null }
 
     val shipsAfloat: Int get() = ships.indices.count { !isSunk(it) }

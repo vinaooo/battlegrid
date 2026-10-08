@@ -10,6 +10,7 @@ import io.github.vinaooo.battlegrid.domain.rules.GameEngine
 import io.github.vinaooo.battlegrid.domain.rules.ShotsScoring
 import io.github.vinaooo.battlegrid.domain.session.GameSession
 import io.github.vinaooo.vinkit.core.Ranking
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 
@@ -62,6 +63,12 @@ class SessionTest {
         val battle = GameSession(1, engine.battle())
         battle.play(Move.ConfirmFleet, engine) shouldBe null
         battle.play(Move.Fire(c(0, 0)), engine)!!.state.enemy.shots shouldBe listOf(c(0, 0))
+    }
+
+    @Test
+    fun `both grids are the mode's size`() {
+        val battle = engine.battle()
+        shouldThrow<IllegalArgumentException> { battle.copy(mode = mode(BoardSize.EIGHT)) }
     }
 
     @Test

@@ -58,6 +58,19 @@ and their defaults, is `PLAN.md`.
   `Random(seed * 37 + hintsUsed)`; `Move.ShowHint` is checked by `HintEngine.isValid` and cleared by the next shot.
 - Pitest skips `GameInvariantsPropertyTest` and `AiStrengthTest` (whole games under every mutant); exact tests pin the same code.
 
+## Data and use cases
+
+- Use cases (`domain/usecase`): `StartNewGame` / `RestartGame` count a left battle against the AI as a loss (and
+  the AI fires first next); a placement or a pass-and-play game isn't recorded. `FinishGame` records a win with its
+  score (`points` = shots + 5 per hint, extras `shots`, `hits`, `hints`) or a loss, and hands the next first shot to
+  the winner. The very first game draws the first mover from its seed (`GameSettings.nextFirstMover == null`).
+- Restart keeps the seed: the same AI fleet and first mover; the player places again.
+- `:data`: `FileSavedGameRepository` (versioned JSON, temp file + rename; a corrupt, invalid or newer file is
+  discarded) and `DataStoreGameSettingsRepository` (keys `board_size`, `firing_mode`, `opponent`,
+  `next_first_mover`, beside vinkit's in one DataStore). `Grid` and `GameState` `require` a consistent fleet and
+  board, so a tampered save is discarded instead of loading broken.
+- `:app/di/UseCaseModule` builds the use cases; `DataModule` provides vinkit's settings, scores and stats.
+
 ## Git
 
 Only `master` is long-lived: branch from it and open PRs against it; the user merges with merge commits. One PR per
