@@ -92,7 +92,6 @@ class GameViewModel @Inject constructor(
             is GameIntent.Tap -> tap(intent.coord)
             GameIntent.FireSalvo -> fireSalvo()
             GameIntent.Hint -> hint()
-            GameIntent.SwapGrids -> state.update { it.copy(ownBig = !it.ownBig) }
             GameIntent.Uncover -> uncover()
             GameIntent.Resign -> resign()
             GameIntent.NewGame -> viewModelScope.launch { newGame(null) }
@@ -133,7 +132,6 @@ class GameViewModel @Inject constructor(
                 aiFiring = false,
                 hiddenShots = 0,
                 revealing = null,
-                ownBig = false,
                 covered = handedOver,
             )
         }
@@ -257,11 +255,11 @@ class GameViewModel @Inject constructor(
     }
 
     /**
-     * The AI's turn, on the player's own grid: a pause, then its shot (a salvo is shown one by one), until the turn
+     * The AI's turn, at the player's own grid: a pause, then its shot (a salvo is shown one by one), until the turn
      * passes or the game ends. It reads the latest state before every shot.
      */
     private fun playAi() {
-        state.update { it.copy(aiFiring = true, ownBig = true) }
+        state.update { it.copy(aiFiring = true) }
         pending = viewModelScope.launch {
             while (state.value.session?.state?.isAiTurn == true) {
                 val session = checkNotNull(state.value.session)
@@ -284,7 +282,7 @@ class GameViewModel @Inject constructor(
                 }
                 if (after.state.isOver) finish(after) else saveGame(after)
             }
-            state.update { it.copy(aiFiring = false, ownBig = false) }
+            state.update { it.copy(aiFiring = false) }
         }
     }
 
@@ -318,20 +316,13 @@ class GameViewModel @Inject constructor(
 
     /** Pass-and-play: the screen covers until [next] takes the phone. */
     private fun handOver(next: Side) {
-        state.update { it.copy(covered = true, ownBig = false) }
+        state.update { it.copy(covered = true) }
         announce(Announcement.Handover(next))
     }
 
-    /** The cover lifts. In battle, the shooter first sees their own grid (where they were hit), then the target. */
+    /** The cover lifts. */
     private fun uncover() {
-        if (!state.value.covered) return
-        val battle = state.value.session?.state?.isBattle == true
-        state.update { it.copy(covered = false, ownBig = battle) }
-        if (!battle) return
-        pending = viewModelScope.launch {
-            delay(OWN_GRID_LOOK_MILLIS)
-            state.update { it.copy(ownBig = false) }
-        }
+        state.update { it.copy(covered = false) }
     }
 
     private fun pause() {
@@ -353,9 +344,8 @@ class GameViewModel @Inject constructor(
         /** The pause before each AI shot, and between a salvo's results. */
         private const val SHOT_PAUSE_MILLIS = 600L
 
-        /** Pass-and-play: how long the result shows before the cover, and the shooter's look at their own grid. */
+        /** Pass-and-play: how long the result shows before the cover. */
         private const val RESULT_LOOK_MILLIS = 1_000L
-        private const val OWN_GRID_LOOK_MILLIS = 1_500L
 
         private const val TICK_MILLIS = 1_000L
         private const val RANDOM_SEED_FACTOR = 41

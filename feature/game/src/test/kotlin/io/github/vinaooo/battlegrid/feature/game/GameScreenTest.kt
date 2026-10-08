@@ -116,11 +116,11 @@ class GameScreenTest {
 
     @Test
     @Config(qualifiers = "w411dp-h891dp")
-    fun `in portrait the small grid shows big on a tap, and a hint is asked from the toolbar`() {
+    fun `in portrait the own grid stays small, one item that takes no taps, and a hint is asked from the toolbar`() {
         show(GameUiState(battle()))
         compose.onNodeWithContentDescription("Your fleet, 5 of 5 ships afloat").performClick()
         compose.onNodeWithContentDescription("Hint").performClick()
-        intents shouldBe listOf(GameIntent.SwapGrids, GameIntent.Hint)
+        intents shouldBe listOf(GameIntent.Hint)
     }
 
     @Test

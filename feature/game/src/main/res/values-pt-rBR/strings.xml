@@ -62,7 +62,6 @@
     <string name="cell_hint">dica</string>
     <string name="your_fleet">Sua frota, %1$d de %2$d navios à tona</string>
     <string name="enemy_waters">Águas inimigas, %1$d de %2$d navios à tona</string>
-    <string name="swap_grids">Mostrar em tamanho grande</string>
     <string name="shot_miss">Água em %1$s</string>
     <string name="shot_hit">Acerto em %1$s</string>
     <string name="shot_sunk">%1$s afundou em %2$s</string>

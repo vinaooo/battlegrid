@@ -80,7 +80,6 @@ class SeaGridTest {
                     GameUiState(session),
                     landscape = true,
                     onTap = { tapped += it },
-                    onSwap = {},
                     modifier = Modifier.size(900.dp, 400.dp),
                 )
             }

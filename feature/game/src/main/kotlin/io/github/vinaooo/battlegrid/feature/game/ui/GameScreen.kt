@@ -129,7 +129,6 @@ private fun Board(uiState: GameUiState, onIntent: (GameIntent) -> Unit) {
             ui = uiState,
             landscape = frame.landscape,
             onTap = { onIntent(GameIntent.Tap(it)) },
-            onSwap = { onIntent(GameIntent.SwapGrids) },
             modifier = Modifier.fillMaxSize().padding(BOARD_PADDING.dp),
         )
     }
