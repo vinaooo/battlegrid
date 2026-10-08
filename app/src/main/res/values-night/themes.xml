@@ -1,0 +1,7 @@
+<resources>
+    <!--
+        A dark window theme at night keeps the system's color inversion for light apps
+        ("make more apps dark") away; Compose draws the theme picked in Settings on top.
+    -->
+    <style name="Theme.BattleGrid" parent="android:Theme.Material.NoActionBar" />
+</resources>

@@ -1,0 +1,27 @@
+# Gradle / build
+.gradle/
+build/
+.kotlin/
+local.properties
+captures/
+.externalNativeBuild/
+.cxx/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+# VS Code's Java extension compiles into bin/ next to each module
+bin/
+.DS_Store
+
+# Signing & secrets — never commit
+*.jks
+*.keystore
+keystore.properties
+secrets.properties
+google-services.json
+play-service-account.json
+
+# Logs
+*.log
