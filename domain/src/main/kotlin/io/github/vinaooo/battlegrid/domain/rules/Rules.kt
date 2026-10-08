@@ -1,5 +1,6 @@
 package io.github.vinaooo.battlegrid.domain.rules
 
+import io.github.vinaooo.battlegrid.domain.hint.HintEngine
 import io.github.vinaooo.battlegrid.domain.model.Coord
 import io.github.vinaooo.battlegrid.domain.model.FiringMode
 import io.github.vinaooo.battlegrid.domain.model.GameState
@@ -109,7 +110,7 @@ internal fun GameState.resolveShots(coords: List<Coord>, firing: FiringRule): Ga
         results += result
         if (grid.isFleetSunk) break
     }
-    val shot = withGrid(toMove.other, grid).copy(salvoMarks = emptyList(), actions = actions + 1)
+    val shot = withGrid(toMove.other, grid).copy(salvoMarks = emptyList(), hint = emptyList(), actions = actions + 1)
     return when {
         grid.isFleetSunk -> shot.copy(phase = Phase.Over(toMove))
         firing.keepsTurn(results) -> shot
@@ -160,4 +161,16 @@ object ResignRule : MoveRule<Move.Resign> {
 
     override fun apply(state: GameState, move: Move.Resign): GameState =
         state.copy(phase = Phase.Over(move.side.other, resigned = true), salvoMarks = emptyList())
+}
+
+/** A hint for the player against the AI, on their turn, at most [HintEngine.MAX_HINTS] a game. */
+object ShowHintRule : MoveRule<Move.ShowHint> {
+    override fun isLegal(state: GameState, move: Move.ShowHint): Boolean = state.isBattle &&
+        state.mode.isVsAi &&
+        state.toMove == Side.PLAYER &&
+        state.hintsUsed < HintEngine.MAX_HINTS &&
+        HintEngine.isValid(state.enemy, move.cells)
+
+    override fun apply(state: GameState, move: Move.ShowHint): GameState =
+        state.copy(hint = move.cells, hintsUsed = state.hintsUsed + 1)
 }

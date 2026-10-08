@@ -47,7 +47,16 @@ and their defaults, is `PLAN.md`.
 - No undo in battle (it would leak where ships aren't). Leaving during placement isn't a loss
   (`GameSession.isInProgress` is true only in battle).
 - Mode keys (`GameMode.key`, e.g. `TEN_SALVO_HARD`, `DAILY`) file scores and stats in vinkit: never rename them.
-- Pitest skips `GameInvariantsPropertyTest` (whole games under every mutant); exact tests pin the same code.
+- AI (`ai/Ai.kt`): each level sees only a `TargetView` (misses, open hits, sunk cells, lengths afloat), never the
+  fleet. A salvo is picked one cell at a time, each chosen cell treated as a miss for the next. Random choices come
+  from `aiRandom(seed, state)` = `Random(seed * 31 + actions)`: frozen after release.
+- Strength: `./gradlew :domain:benchmarkAi -Pgames=300` prints average shots to sink a random fleet per level and
+  size (10×10: Easy ≈ 95, Medium ≈ 59, Hard ≈ 46). `AiStrengthTest` requires each level ≥ 10% fewer shots than the
+  one below, over 60 seeded games (capped by games, never timed).
+- Fleets: `RandomFleetPlacer` picks each ship among every spot still free, so it never retries and a seed gives the
+  same fleet everywhere. Hints: `HintEngine` (5 untried cells, exactly 1 on a ship afloat; fewer when water runs out),
+  `Random(seed * 37 + hintsUsed)`; `Move.ShowHint` is checked by `HintEngine.isValid` and cleared by the next shot.
+- Pitest skips `GameInvariantsPropertyTest` and `AiStrengthTest` (whole games under every mutant); exact tests pin the same code.
 
 ## Git
 
