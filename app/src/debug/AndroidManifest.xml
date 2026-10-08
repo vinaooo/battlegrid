@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application>
+        <!-- Debug builds only: opens a test game or a bug report's game; see DebugGameActivity. -->
+        <activity
+            android:name=".debug.DebugGameActivity"
+            android:exported="true"
+            android:theme="@style/Theme.BattleGrid" />
+    </application>
+
+</manifest>

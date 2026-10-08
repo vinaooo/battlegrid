@@ -42,3 +42,4 @@ rootProject.name = "BattleGrid"
 include(":app")
 include(":domain")
 include(":data")
+include(":feature:game")
