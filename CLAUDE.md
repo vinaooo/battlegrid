@@ -35,6 +35,20 @@ and their defaults, is `PLAN.md`.
   invocation runs out of Metaspace. CI writes its own larger settings.
 - Coverage: vinkit's filters leave out composables, generated code, `*Activity` and `*Application`.
 
+## Domain (`:domain`, pure Kotlin)
+
+- `Grid` stores a side's fleet (`ships`, one slot per class of `BoardSize.fleet`, null until placed) and the shots
+  fired at it, in order. Hit / miss / sunk are always derived from those two (`resultAt`, `isSunk`), never stored.
+- `GameState.toMove` fires at `target` (the other side's grid). `actions` counts applied battle moves and will seed
+  the AI's random choices (`Random(seed * 31 + actions)`): never change that after release.
+- One `MoveRule` per `Move` type (`rules/Rules.kt`), dispatched by `GameEngine`; firing modes are `FiringRule`s
+  (shots per turn, keeps the turn). A salvo resolves shot by shot and stops at the last sinking.
+- The Random placement button is a `Move.SetFleet` with a fleet built outside the engine, so the engine stays pure.
+- No undo in battle (it would leak where ships aren't). Leaving during placement isn't a loss
+  (`GameSession.isInProgress` is true only in battle).
+- Mode keys (`GameMode.key`, e.g. `TEN_SALVO_HARD`, `DAILY`) file scores and stats in vinkit: never rename them.
+- Pitest skips `GameInvariantsPropertyTest` (whole games under every mutant); exact tests pin the same code.
+
 ## Git
 
 Only `master` is long-lived: branch from it and open PRs against it; the user merges with merge commits. One PR per

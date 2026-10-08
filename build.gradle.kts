@@ -16,4 +16,5 @@ plugins {
 
 dependencies {
     kover(project(":app"))
+    kover(project(":domain"))
 }

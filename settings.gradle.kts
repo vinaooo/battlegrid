@@ -40,3 +40,4 @@ dependencyResolutionManagement {
 rootProject.name = "BattleGrid"
 
 include(":app")
+include(":domain")

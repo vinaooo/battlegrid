@@ -13,7 +13,8 @@ fixed in vinkit and released before the game uses them.
 | Slug / package | `battlegrid`; `io.github.vinaooo.battlegrid`; repo `vinaooo/battlegrid`, public, MIT |
 | Brand color | teal (`ThemeColor.TEAL`) |
 | Boards and fleets | 8×8: 5, 4, 3, 2 · 10×10: 5, 4, 3, 3, 2 · 12×12: 5, 4, 4, 3, 3, 2; straight ships, may touch, never overlap |
-| Placement | drag ships onto the grid, tap a ship to rotate, Random, Start; the AI's fleet from the seed |
+| Ship names | Carrier / Porta-aviões (5), Battleship / Encouraçado (4), Frigate / Fragata (4, 12×12 only), Cruiser / Cruzador (3), Submarine / Submarino (3, not on 8×8), Destroyer / Destróier (2) |
+| Placement | drag ships onto the grid, tap a ship to rotate (a ship that would leave the grid shifts back inside), Random, Start; the AI's fleet from the seed |
 | Firing modes | Classic (1 shot), Hit-again (a hit fires again), Salvo (shots = own ships afloat, mark then Fire, per-shot results); same rules for both sides |
 | First shot | random in the very first game, then the previous game's winner |
 | End | sink every enemy ship = win; no draw; resign = loss; leaving during placement isn't a loss |
@@ -43,7 +44,7 @@ fixed in vinkit and released before the game uses them.
 1. **Mode keys:** `<SIZE>_<FIRE>_<LEVEL>`, e.g. `TEN_SALVO_HARD` (27 AI modes) + `DAILY`. Never renamed after release.
 2. **Scores tabs:** grouped by board size (`groupOf`), a section per firing mode × difficulty; `DAILY` and
    Achievements get their own tabs.
-3. **AI randomness:** `Random(seed * 31 + shotsFired)`, frozen after release.
+3. **AI randomness:** `Random(seed * 31 + actions)` (`actions` = applied battle moves; a whole salvo is one), frozen after release.
 4. **Hint randomness:** `Random(seed * 37 + hintsUsed)`, so a hint is the same after process death.
 5. **Hit-again with Salvo** is not a combination (they are values of one setting).
 6. **Info area:** mode ("10×10 · Salvo · Hard"), whose turn ("Your turn", "Enemy firing", "Player 2's turn"), in
@@ -94,7 +95,7 @@ No `build-logic`, no own catalog, no `:feature:scores` / `:feature:settings`: vi
 - `Coord(row, col)`, `Orientation`, `ShipClass(nameKey, length)`, `Ship(class, origin, orientation)`,
   `Fleet(ships)` with `cells`, `isValid(size)`; `FleetSpec.forSize(size)`.
 - `Grid(size, fleet, shots: Map<Coord, ShotResult>)` per side; `ShotResult` = `Miss` / `Hit` / `Sunk(shipIndex)`.
-- `GameMode(size, fire, opponent)` + `key`; `GameState(mode, phase, grids, toMove, salvoMarks, shotsFired, hits,
+- `GameMode(size, fire, opponent)` + `key`; `GameState(mode, phase, grids, toMove, salvoMarks, actions,
   hintsUsed, hint, elapsed, status)`; `phase` = `Placement(side)` / `Battle` / `Over(winner)`. All `@Serializable`.
 - `Move` sealed: `PlaceShip`, `RotateShip`, `RandomFleet`, `ConfirmFleet`, `Fire(coord)`, `MarkSalvo(coord)`,
   `FireSalvo`, `Resign`.
