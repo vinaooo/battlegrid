@@ -25,7 +25,7 @@ fixed in vinkit and released before the game uses them.
 | Helps | no undo / redo in battle; hint = 5 untried cells, exactly 1 is a ship cell; max 3 per game; off in 2-player |
 | Timer | count-up, shown, battle only, no limit |
 | Input | battle: tap fires at once (Classic, Hit-again); Salvo: tap marks / unmarks, toolbar Fire button |
-| Look | flat sea, capsule ships, hit burst, miss ring, sunk ship outlined and dimmed; portrait = enemy grid big + own mini (tap the mini to swap; auto-swap on the opponent's turn); landscape / tablet = side by side |
+| Look | flat sea, capsule ships, hit burst, miss ring, sunk ship outlined and dimmed; portrait = enemy grid big + own mini (tap the mini to swap, instantly; auto-swap on the opponent's turn); landscape / tablet = side by side |
 | Settings → Game | Board size (`Choice`), Firing mode (`Choice`), Opponent (`IconChoice`: Easy / Medium / Hard / 2 players) |
 | Extras | How-to-play screen, sounds (miss / hit / sunk), daily challenge (10×10 Classic vs Hard, UTC date seed, 1 ranked attempt), 9 local achievements on a Scores tab |
 
