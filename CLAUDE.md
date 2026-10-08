@@ -71,6 +71,24 @@ and their defaults, is `PLAN.md`.
   board, so a tampered save is discarded instead of loading broken.
 - `:app/di/UseCaseModule` builds the use cases; `DataModule` provides vinkit's settings, scores and stats.
 
+## Game screen (`:feature:game`)
+
+- `GameUiState.viewer` decides which grid is "own" and which is "target": the player vs the AI; in pass-and-play the
+  side placing or firing. The target grid's view (`targetView`) never holds unsunk ships until the game is over, and
+  the hint's 5 cells look alike, so the fleet can't leak through drawing or TalkBack.
+- The ViewModel's AI loop reads the latest state before every shot; a new game, restart or resign cancels it
+  (`pending`). Pauses: 600 ms before each AI shot and between a salvo's results (both sides); a salvo is in the
+  session at once, the newest `hiddenShots` held back and drawn as marks until shown. Pass-and-play: the result shows
+  1 s, then the cover; after it lifts, the shooter's own grid shows big for 1.5 s.
+- The cover replaces the whole screen (not drawn over it), so TalkBack and the bug-report screenshot can't reach the
+  hidden grids.
+- Placement drag: the drop uses the drag-start point plus the raw travel; only the drawn offset adds the touch slop.
+  The dock gives each ship a fixed slot, so ships don't jump when another is placed.
+- Debug presets: `adb shell am start -S -n io.github.vinaooo.battlegrid/.debug.DebugGameActivity --es game <preset>`
+  with `near_win`, `near_loss`, `salvo_big`, `handover` (see the class's doc).
+- Known, to check with TalkBack on: on the Moto, `uiautomator` reports the target grid's cell nodes about a cell off
+  (touches and Robolectric bounds are right; the own grid's nodes are right).
+
 ## Git
 
 Only `master` is long-lived: branch from it and open PRs against it; the user merges with merge commits. One PR per

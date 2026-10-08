@@ -1,0 +1,81 @@
+<resources>
+    <string name="firing_classic">Clássico</string>
+    <string name="firing_hit_again">Tiro extra</string>
+    <string name="firing_salvo">Salva</string>
+    <string name="opponent_easy">Fácil</string>
+    <string name="opponent_medium">Médio</string>
+    <string name="opponent_hard">Difícil</string>
+    <string name="opponent_two_player">2 jogadores</string>
+    <string name="daily">Desafio diário</string>
+
+    <string name="ship_carrier">Porta-aviões</string>
+    <string name="ship_battleship">Encouraçado</string>
+    <string name="ship_frigate">Fragata</string>
+    <string name="ship_cruiser">Cruzador</string>
+    <string name="ship_submarine">Submarino</string>
+    <string name="ship_destroyer">Destróier</string>
+
+    <string name="player_1">Jogador 1</string>
+    <string name="player_2">Jogador 2</string>
+
+    <string name="place_fleet">Posicione sua frota</string>
+    <string name="player_place_fleet">%1$s, posicione sua frota</string>
+    <string name="your_turn">Sua vez</string>
+    <string name="enemy_turn">Inimigo atirando</string>
+    <string name="player_turn">Vez do %1$s</string>
+    <plurals name="salvo_shots">
+        <item quantity="one">Marque %d tiro</item>
+        <item quantity="other">Marque %d tiros</item>
+    </plurals>
+    <string name="you_won">Você venceu</string>
+    <string name="you_lost">Você perdeu</string>
+    <string name="player_won">%1$s venceu</string>
+
+    <string name="random_fleet">Aleatório</string>
+    <string name="start_battle">Começar</string>
+    <string name="fire">Fogo</string>
+    <string name="new_game">Novo jogo</string>
+    <string name="restart">Reiniciar este tabuleiro</string>
+    <string name="resign">Desistir</string>
+
+    <string name="pass_phone">Passe o celular para o %1$s</string>
+    <string name="tap_to_start">Toque para começar</string>
+
+    <plurals name="shots_count">
+        <item quantity="one">%d tiro</item>
+        <item quantity="other">%d tiros</item>
+    </plurals>
+    <string name="accuracy">Precisão %1$d%%</string>
+    <string name="time">Tempo %1$s</string>
+    <string name="no_hints">Nenhuma dica</string>
+    <plurals name="hints_count">
+        <item quantity="one">%d dica (+5 tiros)</item>
+        <item quantity="other">%d dicas (+%d tiros)</item>
+    </plurals>
+
+    <string name="cell_untried">não testada</string>
+    <string name="cell_water">água</string>
+    <string name="cell_miss">água</string>
+    <string name="cell_hit">acerto</string>
+    <string name="cell_sunk">%1$s afundou</string>
+    <string name="cell_marked">marcada</string>
+    <string name="cell_hint">dica</string>
+    <string name="your_fleet">Sua frota, %1$d de %2$d navios à tona</string>
+    <string name="enemy_waters">Águas inimigas, %1$d de %2$d navios à tona</string>
+    <string name="swap_grids">Mostrar em tamanho grande</string>
+    <string name="shot_miss">Água em %1$s</string>
+    <string name="shot_hit">Acerto em %1$s</string>
+    <string name="shot_sunk">%1$s afundou em %2$s</string>
+    <string name="enemy_shot">Inimigo atira em %1$s: %2$s</string>
+    <string name="hinted">Dica: um de %1$s tem um navio</string>
+    <string name="ship_placed">%1$s, %2$d casas, em %3$s, %4$s</string>
+    <string name="ship_in_dock">%1$s, %2$d casas, fora da grade</string>
+    <string name="horizontal">horizontal</string>
+    <string name="vertical">vertical</string>
+    <string name="move_up">Mover para cima</string>
+    <string name="move_down">Mover para baixo</string>
+    <string name="move_left">Mover para a esquerda</string>
+    <string name="move_right">Mover para a direita</string>
+    <string name="rotate">Girar</string>
+    <string name="place_on_grid">Colocar na grade</string>
+</resources>

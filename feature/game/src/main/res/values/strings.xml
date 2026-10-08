@@ -1,0 +1,93 @@
+<resources>
+    <!-- Modes -->
+    <string name="board_size" translatable="false">%1$d×%1$d</string>
+    <string name="firing_classic">Classic</string>
+    <string name="firing_hit_again">Hit again</string>
+    <string name="firing_salvo">Salvo</string>
+    <string name="opponent_easy">Easy</string>
+    <string name="opponent_medium">Medium</string>
+    <string name="opponent_hard">Hard</string>
+    <string name="opponent_two_player">2 players</string>
+    <string name="daily">Daily challenge</string>
+    <string name="mode_name" translatable="false">%1$s · %2$s · %3$s</string>
+
+    <!-- Ships -->
+    <string name="ship_carrier">Carrier</string>
+    <string name="ship_battleship">Battleship</string>
+    <string name="ship_frigate">Frigate</string>
+    <string name="ship_cruiser">Cruiser</string>
+    <string name="ship_submarine">Submarine</string>
+    <string name="ship_destroyer">Destroyer</string>
+
+    <!-- Players -->
+    <string name="player_1">Player 1</string>
+    <string name="player_2">Player 2</string>
+
+    <!-- Turn -->
+    <string name="place_fleet">Place your fleet</string>
+    <string name="player_place_fleet">%1$s, place your fleet</string>
+    <string name="your_turn">Your turn</string>
+    <string name="enemy_turn">Enemy firing</string>
+    <string name="player_turn">%1$s\'s turn</string>
+    <plurals name="salvo_shots">
+        <item quantity="one">Mark %d shot</item>
+        <item quantity="other">Mark %d shots</item>
+    </plurals>
+    <string name="you_won">You won</string>
+    <string name="you_lost">You lost</string>
+    <string name="player_won">%1$s wins</string>
+
+    <!-- Toolbar and menu -->
+    <string name="random_fleet">Random</string>
+    <string name="start_battle">Start</string>
+    <string name="fire">Fire</string>
+    <string name="new_game">New game</string>
+    <string name="restart">Restart this board</string>
+    <string name="resign">Resign</string>
+
+    <!-- Cover -->
+    <string name="pass_phone">Pass the phone to %1$s</string>
+    <string name="tap_to_start">Tap to start</string>
+
+    <!-- End -->
+    <plurals name="shots_count">
+        <item quantity="one">%d shot</item>
+        <item quantity="other">%d shots</item>
+    </plurals>
+    <string name="accuracy">Accuracy %1$d%%</string>
+    <string name="time">Time %1$s</string>
+    <string name="no_hints">No hints</string>
+    <plurals name="hints_count">
+        <item quantity="one">%d hint (+5 shots)</item>
+        <item quantity="other">%d hints (+%d shots)</item>
+    </plurals>
+
+    <!-- TalkBack -->
+    <string name="cell" translatable="false">%1$s%2$d</string>
+    <string name="cell_state" translatable="false">%1$s, %2$s</string>
+    <string name="cell_untried">untried</string>
+    <string name="cell_water">water</string>
+    <string name="cell_miss">miss</string>
+    <string name="cell_hit">hit</string>
+    <string name="cell_sunk">%1$s sunk</string>
+    <string name="cell_marked">marked</string>
+    <string name="cell_hint">hint</string>
+    <string name="your_fleet">Your fleet, %1$d of %2$d ships afloat</string>
+    <string name="enemy_waters">Enemy waters, %1$d of %2$d ships afloat</string>
+    <string name="swap_grids">Show it big</string>
+    <string name="shot_miss">Miss at %1$s</string>
+    <string name="shot_hit">Hit at %1$s</string>
+    <string name="shot_sunk">%1$s sunk at %2$s</string>
+    <string name="enemy_shot">Enemy fires at %1$s: %2$s</string>
+    <string name="hinted">Hint: one of %1$s holds a ship</string>
+    <string name="ship_placed">%1$s, %2$d cells, at %3$s, %4$s</string>
+    <string name="ship_in_dock">%1$s, %2$d cells, not placed</string>
+    <string name="horizontal">horizontal</string>
+    <string name="vertical">vertical</string>
+    <string name="move_up">Move up</string>
+    <string name="move_down">Move down</string>
+    <string name="move_left">Move left</string>
+    <string name="move_right">Move right</string>
+    <string name="rotate">Rotate</string>
+    <string name="place_on_grid">Place on the grid</string>
+</resources>

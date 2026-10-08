@@ -27,6 +27,8 @@ android {
 dependencies {
     implementation(project(":domain"))
     implementation(project(":data"))
+    implementation(project(":feature:game"))
+    implementation("com.github.vinaooo.vinkit:shell:${providers.gradleProperty("vinkit.tag").get()}")
     implementation("com.github.vinaooo.vinkit:designsystem:${providers.gradleProperty("vinkit.tag").get()}")
 
     implementation(libs.androidx.core.ktx)

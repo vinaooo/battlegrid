@@ -1,35 +1,43 @@
 package io.github.vinaooo.battlegrid
 
+import android.graphics.Color
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dagger.hilt.android.AndroidEntryPoint
-import io.github.vinaooo.vinkit.core.ThemeColor
+import io.github.vinaooo.battlegrid.data.BRAND_COLOR
+import io.github.vinaooo.battlegrid.feature.game.ui.GameRoute
+import io.github.vinaooo.vinkit.core.AppSettings
+import io.github.vinaooo.vinkit.core.AppSettingsRepository
 import io.github.vinaooo.vinkit.designsystem.VinkitTheme
+import io.github.vinaooo.vinkit.designsystem.isDarkTheme
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    @Inject lateinit var appSettings: AppSettingsRepository
+
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         setContent {
-            // ponytail: scaffold screen; the game screen replaces it in milestone 5.
-            // Teal is BattleGrid's brand color.
-            VinkitTheme(themeColor = ThemeColor.TEAL) {
-                Surface(Modifier.fillMaxSize()) {
-                    Box(contentAlignment = Alignment.Center) {
-                        Text(stringResource(R.string.app_name), style = MaterialTheme.typography.displayMedium)
-                    }
-                }
+            val settings by appSettings.settings.collectAsStateWithLifecycle(AppSettings(themeColor = BRAND_COLOR))
+            val darkTheme = isDarkTheme(settings.themeMode, isSystemInDarkTheme())
+            LaunchedEffect(darkTheme) {
+                // System bar icons follow the in-app theme choice, not only the system's.
+                val barStyle = SystemBarStyle.auto(Color.TRANSPARENT, Color.TRANSPARENT) { darkTheme }
+                enableEdgeToEdge(statusBarStyle = barStyle, navigationBarStyle = barStyle)
+            }
+            VinkitTheme(settings.themeColor, settings.themeMode, settings.dynamicColor) {
+                // ponytail: the game screen alone; navigation, Scores, Settings and the banner come in milestone 6.
+                GameRoute()
             }
         }
     }
