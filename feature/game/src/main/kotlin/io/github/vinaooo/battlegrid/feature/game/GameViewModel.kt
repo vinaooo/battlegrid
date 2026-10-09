@@ -21,6 +21,7 @@ import io.github.vinaooo.battlegrid.domain.usecase.FinishGame
 import io.github.vinaooo.battlegrid.domain.usecase.RestartGame
 import io.github.vinaooo.battlegrid.domain.usecase.ResumeGame
 import io.github.vinaooo.battlegrid.domain.usecase.SaveGame
+import io.github.vinaooo.battlegrid.domain.usecase.StartDailyGame
 import io.github.vinaooo.battlegrid.domain.usecase.StartNewGame
 import io.github.vinaooo.vinkit.core.AppSettingsRepository
 import io.github.vinaooo.vinkit.shell.FeedbackEvent
@@ -37,6 +38,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -46,12 +48,13 @@ import kotlinx.coroutines.withContext
 @HiltViewModel
 class GameViewModel @Inject constructor(
     private val startNewGame: StartNewGame,
+    private val startDailyGame: StartDailyGame,
     private val restartGame: RestartGame,
     private val resumeGame: ResumeGame,
     private val saveGame: SaveGame,
     private val finishGame: FinishGame,
     appSettings: AppSettingsRepository,
-    gameSettings: GameSettingsRepository,
+    private val gameSettings: GameSettingsRepository,
     private val engine: GameEngine,
     private val feedback: GameFeedback,
     @AiDispatcher private val aiDispatcher: CoroutineDispatcher,
@@ -83,6 +86,10 @@ class GameViewModel @Inject constructor(
             // A mode changed in Settings (confirmed there when a game was on) starts a game in it.
             gameSettings.settings.map { it.mode }.distinctUntilChanged().drop(1).collect { newGame(it) }
         }
+        viewModelScope.launch {
+            val seen = gameSettings.settings.first().howToPlaySeen
+            state.update { it.copy(howToPlayDue = !seen) }
+        }
     }
 
     fun onIntent(intent: GameIntent) {
@@ -95,6 +102,11 @@ class GameViewModel @Inject constructor(
             GameIntent.Uncover -> uncover()
             GameIntent.Resign -> resign()
             GameIntent.NewGame -> viewModelScope.launch { newGame(null) }
+            GameIntent.Daily -> viewModelScope.launch {
+                pending?.cancel()
+                show(startDailyGame())
+            }
+            GameIntent.HowToPlaySeen -> howToPlaySeen()
             GameIntent.Restart -> viewModelScope.launch { restart() }
             GameIntent.Resume -> clock.start()
             GameIntent.Pause -> pause()
@@ -129,6 +141,7 @@ class GameViewModel @Inject constructor(
         state.update {
             it.copy(
                 session = session,
+                earned = emptySet(),
                 aiFiring = false,
                 hiddenShots = 0,
                 revealing = null,
@@ -311,7 +324,8 @@ class GameViewModel @Inject constructor(
         val winner = checkNotNull(game.winner)
         if (!game.mode.isVsAi || winner == Side.PLAYER) feedback.give(FeedbackEvent.WIN, state.value.settings)
         announce(Announcement.Ended(winner, game.mode.isVsAi, (game.phase as Phase.Over).resigned))
-        finishGame(session)
+        val earned = finishGame(session)
+        state.update { it.copy(earned = earned) }
     }
 
     /** Pass-and-play: the screen covers until [next] takes the phone. */
@@ -323,6 +337,11 @@ class GameViewModel @Inject constructor(
     /** The cover lifts. */
     private fun uncover() {
         state.update { it.copy(covered = false) }
+    }
+
+    private fun howToPlaySeen() {
+        state.update { it.copy(howToPlayDue = false) }
+        viewModelScope.launch { gameSettings.update { it.copy(howToPlaySeen = true) } }
     }
 
     private fun pause() {

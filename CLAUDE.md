@@ -104,6 +104,20 @@ and their defaults, is `PLAN.md`.
 - Bug report: `ReportTarget("vrpedrinho+battlegrid@gmail.com", "vinaooo/battlegrid")`, with the settings, a game
   line, the `GameCodec` state and `game.json`.
 
+## Daily challenge, badges, sounds
+
+- Daily: `dailySeed(day)` (UTC days since the epoch; frozen after release), 10×10 Classic vs Hard, the player fires
+  first, same AI fleet and AI random stream for everyone. The first daily finished or left mid-battle that day is
+  ranked (`GameSession.recorded`); later ones are practice (no stats, scores or badges). `DailyRecord` keeps the last
+  ranked day and the streak of days played in a row.
+- Badges: `Achievements.after` (pure) over `AchievementProgress` (unlocked + sizes and firing modes won), stored in
+  the settings DataStore (`achievements_*` keys, `Achievement` names: never rename). `FinishGame` returns the ones
+  just earned; the end dialog lists them. They have their own screen (`badges/`), opened by a button beside Scores
+  (vinkit 0.7.0 `GameFrame(navigation = …)`).
+- How to play opens by itself once (`GameSettings.howToPlaySeen`), and from the new-game menu.
+- Sounds: `app/src/main/res/raw/sfx_*.wav`, made by `python3 tools/sfx.py app/src/main/res/raw` (synthesized, no
+  third-party audio), played by name through vinkit's `AndroidGameFeedback(sounds = …)`.
+
 ## Git
 
 Only `master` is long-lived: branch from it and open PRs against it; the user merges with merge commits. One PR per

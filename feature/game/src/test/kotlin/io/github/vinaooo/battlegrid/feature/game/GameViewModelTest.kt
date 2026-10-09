@@ -1,6 +1,8 @@
 package io.github.vinaooo.battlegrid.feature.game
 
+import io.github.vinaooo.battlegrid.domain.fake.FakeAchievementRepository
 import io.github.vinaooo.battlegrid.domain.fake.FakeClock
+import io.github.vinaooo.battlegrid.domain.fake.FakeDailyRepository
 import io.github.vinaooo.battlegrid.domain.fake.FakeGameSettingsRepository
 import io.github.vinaooo.battlegrid.domain.fake.FakeSavedGameRepository
 import io.github.vinaooo.battlegrid.domain.fake.FakeScoreRepository
@@ -21,9 +23,11 @@ import io.github.vinaooo.battlegrid.domain.repository.GameSettings
 import io.github.vinaooo.battlegrid.domain.rules.GameEngine
 import io.github.vinaooo.battlegrid.domain.session.GameSession
 import io.github.vinaooo.battlegrid.domain.usecase.FinishGame
+import io.github.vinaooo.battlegrid.domain.usecase.RecordProgress
 import io.github.vinaooo.battlegrid.domain.usecase.RestartGame
 import io.github.vinaooo.battlegrid.domain.usecase.ResumeGame
 import io.github.vinaooo.battlegrid.domain.usecase.SaveGame
+import io.github.vinaooo.battlegrid.domain.usecase.StartDailyGame
 import io.github.vinaooo.battlegrid.domain.usecase.StartNewGame
 import io.github.vinaooo.vinkit.core.AppSettings
 import io.github.vinaooo.vinkit.core.AppSettingsRepository
@@ -85,12 +89,17 @@ class GameViewModelTest {
         Dispatchers.resetMain()
     }
 
+    private val clock = FakeClock(now = 20_000L * 86_400_000L)
+    private val achievements = FakeAchievementRepository()
+    private val progress = RecordProgress(FakeDailyRepository(), achievements, stats)
+
     private fun TestScope.viewModel(): GameViewModel = GameViewModel(
-        StartNewGame(savedGames, gameSettings, stats, FakeSeedSource(), engine),
-        RestartGame(savedGames, gameSettings, stats, engine),
+        StartNewGame(savedGames, gameSettings, progress, FakeSeedSource(), engine),
+        StartDailyGame(savedGames, gameSettings, progress, clock, engine),
+        RestartGame(savedGames, gameSettings, progress, engine),
         ResumeGame(savedGames),
         SaveGame(savedGames),
-        FinishGame(savedGames, gameSettings, stats, FakeScoreRepository(), FakeClock()),
+        FinishGame(savedGames, gameSettings, FakeScoreRepository(), clock, progress),
         appSettings,
         gameSettings,
         engine,
@@ -247,6 +256,8 @@ class GameViewModelTest {
         vm.uiState.value.ended shouldBe true
         vm.uiState.value.announcement shouldBe Announcement.Ended(Side.PLAYER, vsAi = true, resigned = false)
         played shouldBe listOf("sunk", "WIN")
+        vm.uiState.value.earned shouldBe achievements.current.value.unlocked
+        vm.uiState.value.earned.contains(io.github.vinaooo.battlegrid.domain.model.Achievement.FIRST_WIN) shouldBe true
         stats.stats.value shouldBe mapOf(GameMode.DEFAULT.key to GameStats(1, 1, 1, 1))
         savedGames.saved shouldBe null
     }
@@ -362,6 +373,27 @@ class GameViewModelTest {
         advanceUntilIdle()
         vm.state().winner shouldBe Side.ENEMY
         stats.stats.value shouldBe emptyMap()
+    }
+
+    @Test
+    fun `the daily challenge starts from the menu, and a new game clears earned badges`() = runTest(dispatcher) {
+        val vm = viewModel()
+        vm.onIntent(GameIntent.Daily)
+        runCurrent()
+        vm.state().mode shouldBe GameMode.DAILY
+        vm.uiState.value.session!!.recorded shouldBe true
+        vm.uiState.value.earned shouldBe emptySet()
+    }
+
+    @Test
+    fun `How to play is due on the first launch only`() = runTest(dispatcher) {
+        val vm = viewModel()
+        vm.uiState.value.howToPlayDue shouldBe true
+        vm.onIntent(GameIntent.HowToPlaySeen)
+        runCurrent()
+        vm.uiState.value.howToPlayDue shouldBe false
+        gameSettings.current.value.howToPlaySeen shouldBe true
+        viewModel().uiState.value.howToPlayDue shouldBe false
     }
 
     private companion object {

@@ -1,6 +1,10 @@
 package io.github.vinaooo.battlegrid.domain.fake
 
+import io.github.vinaooo.battlegrid.domain.model.AchievementProgress
+import io.github.vinaooo.battlegrid.domain.repository.AchievementRepository
 import io.github.vinaooo.battlegrid.domain.repository.Clock
+import io.github.vinaooo.battlegrid.domain.repository.DailyRecord
+import io.github.vinaooo.battlegrid.domain.repository.DailyRepository
 import io.github.vinaooo.battlegrid.domain.repository.GameSettings
 import io.github.vinaooo.battlegrid.domain.repository.GameSettingsRepository
 import io.github.vinaooo.battlegrid.domain.repository.SavedGameRepository
@@ -69,4 +73,24 @@ class FakeSeedSource : SeedSource {
 
 class FakeClock(var now: Long = 0) : Clock {
     override fun nowMillis(): Long = now
+}
+
+class FakeDailyRepository(initial: DailyRecord = DailyRecord()) : DailyRepository {
+    val current = MutableStateFlow(initial)
+
+    override val record: Flow<DailyRecord> = current
+
+    override suspend fun update(transform: (DailyRecord) -> DailyRecord) {
+        current.value = transform(current.value)
+    }
+}
+
+class FakeAchievementRepository(initial: AchievementProgress = AchievementProgress()) : AchievementRepository {
+    val current = MutableStateFlow(initial)
+
+    override val progress: Flow<AchievementProgress> = current
+
+    override suspend fun update(transform: (AchievementProgress) -> AchievementProgress) {
+        current.value = transform(current.value)
+    }
 }

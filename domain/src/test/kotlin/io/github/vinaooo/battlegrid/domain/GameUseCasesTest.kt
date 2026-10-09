@@ -1,6 +1,8 @@
 package io.github.vinaooo.battlegrid.domain
 
+import io.github.vinaooo.battlegrid.domain.fake.FakeAchievementRepository
 import io.github.vinaooo.battlegrid.domain.fake.FakeClock
+import io.github.vinaooo.battlegrid.domain.fake.FakeDailyRepository
 import io.github.vinaooo.battlegrid.domain.fake.FakeGameSettingsRepository
 import io.github.vinaooo.battlegrid.domain.fake.FakeSavedGameRepository
 import io.github.vinaooo.battlegrid.domain.fake.FakeScoreRepository
@@ -18,6 +20,7 @@ import io.github.vinaooo.battlegrid.domain.repository.GameSettings
 import io.github.vinaooo.battlegrid.domain.rules.GameEngine
 import io.github.vinaooo.battlegrid.domain.session.GameSession
 import io.github.vinaooo.battlegrid.domain.usecase.FinishGame
+import io.github.vinaooo.battlegrid.domain.usecase.RecordProgress
 import io.github.vinaooo.battlegrid.domain.usecase.RestartGame
 import io.github.vinaooo.battlegrid.domain.usecase.ResumeGame
 import io.github.vinaooo.battlegrid.domain.usecase.SaveGame
@@ -38,9 +41,10 @@ class GameUseCasesTest {
     private val stats = FakeStatsRepository()
     private val scores = FakeScoreRepository()
     private val clock = FakeClock(now = 1_000)
-    private val start = StartNewGame(saved, settings, stats, FakeSeedSource(), engine)
-    private val restart = RestartGame(saved, settings, stats, engine)
-    private val finish = FinishGame(saved, settings, stats, scores, clock)
+    private val progress = RecordProgress(FakeDailyRepository(), FakeAchievementRepository(), stats)
+    private val start = StartNewGame(saved, settings, progress, FakeSeedSource(), engine)
+    private val restart = RestartGame(saved, settings, progress, engine)
+    private val finish = FinishGame(saved, settings, scores, clock, progress)
 
     private fun GameSession.inBattle(): GameSession =
         play(Move.SetFleet(rowFleet(state.mode.size)), engine)!!.let { it.play(Move.ConfirmFleet, engine) ?: it }

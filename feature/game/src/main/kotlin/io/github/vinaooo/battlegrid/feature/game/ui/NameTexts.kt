@@ -2,6 +2,7 @@ package io.github.vinaooo.battlegrid.feature.game.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
+import io.github.vinaooo.battlegrid.domain.model.Achievement
 import io.github.vinaooo.battlegrid.domain.model.FiringMode
 import io.github.vinaooo.battlegrid.domain.model.GameMode
 import io.github.vinaooo.battlegrid.domain.model.Opponent
@@ -40,10 +41,10 @@ internal fun opponentName(opponent: Opponent): String = stringResource(
     },
 )
 
-/** "10×10 · Salvo · Hard", or the daily challenge's name. */
+/** "10×10 · Salvo · Hard", or the daily challenge's name (a practice when not [recorded]). */
 @Composable
-internal fun modeName(mode: GameMode): String = if (mode.daily) {
-    stringResource(R.string.daily)
+internal fun modeName(mode: GameMode, recorded: Boolean = true): String = if (mode.daily) {
+    stringResource(if (recorded) R.string.daily else R.string.daily_practice)
 } else {
     stringResource(
         R.string.mode_name,
@@ -56,3 +57,21 @@ internal fun modeName(mode: GameMode): String = if (mode.daily) {
 @Composable
 internal fun playerName(side: Side): String =
     stringResource(if (side == Side.PLAYER) R.string.player_1 else R.string.player_2)
+
+@Composable
+internal fun badgeName(badge: Achievement): String = stringResource(badgeTexts.getValue(badge).first)
+
+@Composable
+internal fun badgeNote(badge: Achievement): String = stringResource(badgeTexts.getValue(badge).second)
+
+private val badgeTexts = mapOf(
+    Achievement.FIRST_WIN to (R.string.badge_first_win to R.string.badge_first_win_note),
+    Achievement.WIN_EVERY_SIZE to (R.string.badge_every_size to R.string.badge_every_size_note),
+    Achievement.WIN_EVERY_FIRING to (R.string.badge_every_firing to R.string.badge_every_firing_note),
+    Achievement.BEAT_HARD to (R.string.badge_beat_hard to R.string.badge_beat_hard_note),
+    Achievement.NO_HINT_WIN to (R.string.badge_no_hints to R.string.badge_no_hints_note),
+    Achievement.CLEAN_SINK to (R.string.badge_clean_sink to R.string.badge_clean_sink_note),
+    Achievement.WIN_STREAK_5 to (R.string.badge_streak to R.string.badge_streak_note),
+    Achievement.DAILY_STREAK_7 to (R.string.badge_daily_streak to R.string.badge_daily_streak_note),
+    Achievement.ACCURACY_60 to (R.string.badge_accuracy to R.string.badge_accuracy_note),
+)

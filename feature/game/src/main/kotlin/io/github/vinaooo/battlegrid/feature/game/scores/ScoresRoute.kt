@@ -28,14 +28,15 @@ fun ScoresRoute(
         onBack = onBack,
         modeName = { key ->
             GameMode.fromKey(key)?.let {
-                stringResource(R.string.firing_and_opponent, firingName(it.firing), opponentName(it.opponent))
+                if (it.daily) {
+                    stringResource(R.string.daily)
+                } else {
+                    stringResource(R.string.firing_and_opponent, firingName(it.firing), opponentName(it.opponent))
+                }
             } ?: key
         },
         modifier = modifier,
-        groupName = { size ->
-            BoardSize.entries.firstOrNull { it.name == size }?.let { stringResource(R.string.board_size, it.side) }
-                ?: size
-        },
+        groupName = { group -> groupName(group) },
         onSelectGroup = viewModel::selectGroup,
         details = { record ->
             val hints = record.extras[FinishGame.HINTS]?.toIntOrNull() ?: 0
@@ -47,4 +48,12 @@ fun ScoresRoute(
         },
         points = { ScorePoints("${it.points}", pluralStringResource(R.plurals.shots_count, it.points, it.points)) },
     )
+}
+
+/** A tab's name: a board size or the daily challenge. */
+@Composable
+private fun groupName(group: String): String = when (group) {
+    GameMode.DAILY_KEY -> stringResource(R.string.tab_daily)
+    else -> BoardSize.entries.firstOrNull { it.name == group }?.let { stringResource(R.string.board_size, it.side) }
+        ?: group
 }

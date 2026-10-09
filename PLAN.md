@@ -27,7 +27,7 @@ fixed in vinkit and released before the game uses them.
 | Input | battle: tap fires at once (Classic, Hit-again); Salvo: tap marks / unmarks, toolbar Fire button |
 | Look | flat sea, capsule ships, hit burst, miss ring, sunk ship outlined and dimmed; portrait = enemy grid big + own mini (fixed: the grids never swap); landscape / tablet = side by side |
 | Settings → Game | Board size (`Choice`), Firing mode (`Choice`), Opponent (`IconChoice`: Easy / Medium / Hard / 2 players) |
-| Extras | How-to-play screen, sounds (miss / hit / sunk), daily challenge (10×10 Classic vs Hard, UTC date seed, 1 ranked attempt), 9 local achievements on a Scores tab |
+| Extras | How-to-play screen, sounds (miss / hit / sunk), daily challenge (10×10 Classic vs Hard, UTC date seed, 1 ranked attempt), 9 local achievements on their own screen (a button beside Scores) |
 
 ## Project defaults (veto any)
 - Languages pt-BR + en; portrait + landscape, phones and tablets (phone view on tablets).
