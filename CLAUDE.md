@@ -127,6 +127,42 @@ and their defaults, is `PLAN.md`.
   (placement, battle dark, 12×12 salvo, landscape, tablet phone view, pt-BR). Re-record with
   `./gradlew recordRoborazziDebug` and look at the images before committing.
 
+## Game identity
+
+*(code)* = read from the code; *(user)* = the user's decision, 2026-10-09.
+
+- **Visual metaphor:** to be defined: a prototype comes before the decision *(user)*. Today: a flat sea grid seen
+  from above, A–L / 1–12 labels *(code)*. Mood: tense naval combat, keeping Material 3 Expressive's elements *(user)*.
+- **Game tokens:** `BoardColors` (`board/BoardColors.kt`) in `LocalBoardColors`, built from
+  `MaterialTheme.colorScheme` by `ProvideBoardColors` (around the board in `GameScreen`; tests wrap it too): sea
+  `surfaceContainerHigh`, line `outlineVariant`, label `onSurfaceVariant`, ship `secondary`, hit `error`, hitOnShip
+  `onSecondary`, miss `outline`, mark `primary`, hint `tertiary`. Shapes are fractions of a cell (`SeaGrid.kt`:
+  `CORNER`, `SHIP_INSET` (also the dock's), `*_RADIUS`, `STROKE`, `SPOKES`); labels scale to the label band
+  (`LABEL_SIZE`), no own typeface. Cover: `primaryContainer` *(code)*.
+- **Custom components:** `board/`: `SeaGrid` (one Canvas + TalkBack cell nodes), `BattleBoard` (big target, mini
+  own; `battleLayout` in `Geometry.kt`), `PlacementBoard` (dock, drag, rotate, TalkBack actions). `ui/GameScreen.kt`:
+  `Cover`, `EndDialog` (wraps `WinDialog`). `ui/HowToPlayScreen.kt` *(code)*.
+- **Motion and feedback:** the last shot springs in (`motionScheme.fastSpatialSpec`); a dragged ship lifts ×1.06;
+  pauses as in Game screen; end dialog after 1.2 s, random `WinCelebration`. Game sounds `miss` / `hit` / `sunk`
+  (`GameViewModel.SOUND_*`, `app/di/GameModule`) with the kit's haptics MOVE / MOVE / WIN; kit sounds: `REJECTED`
+  (refused tap or drop), `WIN` (a celebrated win) *(code)*.
+- **vinkit extension points used:** `SettingsScreen(gameSections)`: Game (Board, Firing `Choice`, Opponent
+  `IconChoice`). `ScoresScreen`: `groupName` (sizes + Daily), `modeName`, `details` (hints), `points` (shots);
+  `extra` unused. `WinDialog(lines, title, kind)`: mode, shots, accuracy, time, hints, new badges.
+  `GameFrame(navigation)`: Badges. `GameToolbar` + `MenuOption`, `AndroidGameFeedback(sounds)`,
+  `BadgesScreen(battleGridBadges())`, `GameSurface(gameReport)` *(code)*.
+- **Game achievements:** 9 `Achievement`s, texts `badge_*` / `badge_*_note`: First win, All waters, Every way to
+  fire, Admiral, On your own, Clean sink, On a roll, Every day, Sharpshooter. No own icons (vinkit's `Badge` has
+  none) *(code)*.
+- **Do not:**
+  - use colors outside `colorScheme` / `BoardColors`; never hardcode one *(user)*;
+  - change the shot glyphs: miss = ring, hit = burst, salvo mark = crosshair, hint = the same frame on all five
+    *(user)*;
+  - build own Settings, Scores, Badges, toolbar, new-game menu or end dialog: extend vinkit's *(code)*;
+  - draw anything that tells hint cells apart or shows unsunk enemy ships, or swap the grids (Game screen) *(code)*.
+- **Open to experimentation:** shot animations, ship and sea drawing, sound timbre (the Sounds rule above still
+  holds), the Cover and How to play look *(user)*.
+
 ## Git
 
 Only `master` is long-lived: branch from it and open PRs against it; the user merges with merge commits. One PR per

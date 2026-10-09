@@ -48,7 +48,7 @@ internal fun SeaGrid(
     nodes: Boolean = true,
     cellDescription: @Composable (Coord) -> String = { "" },
 ) {
-    val colors = boardColors(MaterialTheme.colorScheme)
+    val colors = LocalBoardColors.current
     val measurer = rememberTextMeasurer()
     // Kept outside BoxWithConstraints, which may rebuild its content.
     val landing = remember(view.last) { Animatable(if (view.last == null) 1f else 0f) }
@@ -204,7 +204,10 @@ private const val HALF = 0.5f
 private const val LINE = 1
 private const val CORNER = 0.15f
 private const val LABEL_SIZE = 0.6f
-private const val SHIP_INSET = 0.12f
+
+/** How far a ship stays inside its cells, as a fraction of a cell (the grid's and the dock's). */
+internal const val SHIP_INSET = 0.12f
+
 private const val HINT_INSET = 0.08f
 private const val MARK_RADIUS = 0.28f
 private const val MISS_RADIUS = 0.16f
