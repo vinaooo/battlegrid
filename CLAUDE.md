@@ -133,11 +133,12 @@ and their defaults, is `PLAN.md`.
 
 - **Visual metaphor:** to be defined: a prototype comes before the decision *(user)*. Today: a flat sea grid seen
   from above, A–L / 1–12 labels *(code)*. Mood: tense naval combat, keeping Material 3 Expressive's elements *(user)*.
-- **Game tokens:** `BoardColors` (`board/BoardColors.kt`), built by `boardColors(MaterialTheme.colorScheme)` in
-  `SeaGrid` (a plain function, no CompositionLocal): sea `surfaceContainerHigh`, line `outlineVariant`, label
-  `onSurfaceVariant`, ship `secondary`, hit `error`, hitOnShip `onSecondary`, miss `outline`, mark `primary`, hint
-  `tertiary`. Shapes are fractions of a cell (`SeaGrid.kt`: `CORNER`, `SHIP_INSET`, `*_RADIUS`, `STROKE`, `SPOKES`);
-  labels scale to the label band (`LABEL_SIZE`), no own typeface. Cover: `primaryContainer` *(code)*.
+- **Game tokens:** `BoardColors` (`board/BoardColors.kt`) in `LocalBoardColors`, built from
+  `MaterialTheme.colorScheme` by `ProvideBoardColors` (around the board in `GameScreen`; tests wrap it too): sea
+  `surfaceContainerHigh`, line `outlineVariant`, label `onSurfaceVariant`, ship `secondary`, hit `error`, hitOnShip
+  `onSecondary`, miss `outline`, mark `primary`, hint `tertiary`. Shapes are fractions of a cell (`SeaGrid.kt`:
+  `CORNER`, `SHIP_INSET` (also the dock's), `*_RADIUS`, `STROKE`, `SPOKES`); labels scale to the label band
+  (`LABEL_SIZE`), no own typeface. Cover: `primaryContainer` *(code)*.
 - **Custom components:** `board/`: `SeaGrid` (one Canvas + TalkBack cell nodes), `BattleBoard` (big target, mini
   own; `battleLayout` in `Geometry.kt`), `PlacementBoard` (dock, drag, rotate, TalkBack actions). `ui/GameScreen.kt`:
   `Cover`, `EndDialog` (wraps `WinDialog`). `ui/HowToPlayScreen.kt` *(code)*.

@@ -51,6 +51,7 @@ import io.github.vinaooo.battlegrid.feature.game.R
 import io.github.vinaooo.battlegrid.feature.game.REPORT_TARGET
 import io.github.vinaooo.battlegrid.feature.game.board.BattleBoard
 import io.github.vinaooo.battlegrid.feature.game.board.PlacementBoard
+import io.github.vinaooo.battlegrid.feature.game.board.ProvideBoardColors
 import io.github.vinaooo.battlegrid.feature.game.gameReport
 import io.github.vinaooo.vinkit.bugreport.ReportTarget
 import io.github.vinaooo.vinkit.core.formatElapsed
@@ -132,7 +133,7 @@ fun GameScreen(
             settings = uiState.settings,
             info = { frame -> Info(uiState, frame) },
             board = {
-                Board(uiState, onIntent)
+                ProvideBoardColors { Board(uiState, onIntent) }
             },
             toolbar = { frame -> Toolbar(uiState, onIntent, frame, reportBug, onOpenHowToPlay) },
             onOpenScores = onOpenScores,

@@ -13,6 +13,7 @@ import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.unit.dp
 import io.github.vinaooo.battlegrid.domain.model.Coord
 import io.github.vinaooo.battlegrid.feature.game.board.GridView
+import io.github.vinaooo.battlegrid.feature.game.board.ProvideBoardColors
 import io.github.vinaooo.battlegrid.feature.game.board.SeaGrid
 import io.github.vinaooo.battlegrid.feature.game.ui.cellName
 import io.github.vinaooo.vinkit.core.ThemeColor
@@ -32,13 +33,15 @@ class SeaGridTest {
 
     private fun show() = compose.setContent {
         VinkitTheme(ThemeColor.TEAL) {
-            SeaGrid(
-                GridView(10, emptyList(), emptyList()),
-                Modifier.size(318.dp),
-                onTap = { tapped += it },
-                tappable = { true },
-                cellDescription = { cellName(it) },
-            )
+            ProvideBoardColors {
+                SeaGrid(
+                    GridView(10, emptyList(), emptyList()),
+                    Modifier.size(318.dp),
+                    onTap = { tapped += it },
+                    tappable = { true },
+                    cellDescription = { cellName(it) },
+                )
+            }
         }
     }
 
@@ -76,12 +79,14 @@ class SeaGridTest {
             .play(io.github.vinaooo.battlegrid.domain.model.Move.ConfirmFleet, engine)!!
         compose.setContent {
             VinkitTheme(ThemeColor.TEAL) {
-                io.github.vinaooo.battlegrid.feature.game.board.BattleBoard(
-                    GameUiState(session),
-                    landscape = true,
-                    onTap = { tapped += it },
-                    modifier = Modifier.size(900.dp, 400.dp),
-                )
+                ProvideBoardColors {
+                    io.github.vinaooo.battlegrid.feature.game.board.BattleBoard(
+                        GameUiState(session),
+                        landscape = true,
+                        onTap = { tapped += it },
+                        modifier = Modifier.size(900.dp, 400.dp),
+                    )
+                }
             }
         }
         val node = compose.onNodeWithContentDescription("E5, untried").getBoundsInRoot()

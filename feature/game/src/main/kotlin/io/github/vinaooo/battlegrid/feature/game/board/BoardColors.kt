@@ -1,7 +1,12 @@
 package io.github.vinaooo.battlegrid.feature.game.board
 
 import androidx.compose.material3.ColorScheme
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 
 /** The grids' colors, all from the theme's scheme, so every palette and both themes stay readable. */
@@ -30,3 +35,15 @@ internal fun boardColors(scheme: ColorScheme) = BoardColors(
     mark = scheme.primary,
     hint = scheme.tertiary,
 )
+
+/** The board's colors, provided by [ProvideBoardColors]. */
+internal val LocalBoardColors = staticCompositionLocalOf<BoardColors> {
+    error("No BoardColors: wrap the board in ProvideBoardColors")
+}
+
+/** Gives [content] the board's colors, built from the current theme's scheme. */
+@Composable
+internal fun ProvideBoardColors(content: @Composable () -> Unit) {
+    val scheme = MaterialTheme.colorScheme
+    CompositionLocalProvider(LocalBoardColors provides remember(scheme) { boardColors(scheme) }, content = content)
+}

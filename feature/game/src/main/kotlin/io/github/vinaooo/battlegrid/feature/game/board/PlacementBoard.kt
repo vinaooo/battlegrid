@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -126,7 +125,7 @@ private fun FleetShip(
             Modifier
                 .matchParentSize()
                 .padding(with(density) { (cellPx * SHIP_INSET).toDp() })
-                .background(MaterialTheme.colorScheme.secondary, CircleShape),
+                .background(LocalBoardColors.current.ship, CircleShape),
         )
     }
 }
@@ -234,5 +233,4 @@ private fun Offset.touchSlop(touchSlop: Float): Offset {
     return if (distance == 0f) Offset.Zero else this / distance * touchSlop
 }
 
-private const val SHIP_INSET = 0.12f
 private const val LIFTED = 1.06f
