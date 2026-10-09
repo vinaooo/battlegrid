@@ -170,4 +170,43 @@ class GameScreenTest {
         compose.mainClock.advanceTimeBy(1_300)
         compose.onNodeWithText("No hints").assertExists()
     }
+
+    @Test
+    @Config(qualifiers = "w411dp-h891dp")
+    fun `the end dialog lists the badges just earned`() {
+        val won = battle().play(Move.Resign(Side.ENEMY), engine)!!
+        compose.mainClock.autoAdvance = false
+        show(GameUiState(won, earned = setOf(io.github.vinaooo.battlegrid.domain.model.Achievement.FIRST_WIN)))
+        compose.mainClock.advanceTimeBy(1_300)
+        compose.onNodeWithText("New badge: First win").assertExists()
+    }
+
+    @Test
+    @Config(qualifiers = "w411dp-h891dp")
+    fun `the Badges button beside Scores opens the badges`() {
+        var opened = false
+        compose.setContent {
+            VinkitTheme(ThemeColor.TEAL) {
+                GameScreen(GameUiState(battle()), {
+                    intents += it
+                }, onOpenScores = {}, onOpenBadges = { opened = true })
+            }
+        }
+        compose.onNodeWithContentDescription("Badges").performClick()
+        opened shouldBe true
+    }
+
+    @Test
+    fun `the badges page reads each badge as earned or locked`() {
+        compose.setContent {
+            VinkitTheme(ThemeColor.TEAL) {
+                io.github.vinaooo.battlegrid.feature.game.badges.BadgesScreen(
+                    setOf(io.github.vinaooo.battlegrid.domain.model.Achievement.FIRST_WIN),
+                    onBack = {},
+                )
+            }
+        }
+        compose.onNodeWithContentDescription("First win, earned: Win a game against the phone").assertExists()
+        compose.onNodeWithContentDescription("All waters, locked: Win on 8×8, 10×10 and 12×12").assertExists()
+    }
 }

@@ -106,4 +106,46 @@
         <item quantity="one">%d hint</item>
         <item quantity="other">%d hints</item>
     </plurals>
+    <!-- Daily, badges, how to play -->
+    <string name="daily_practice">Daily challenge · practice</string>
+    <string name="how_to_play">How to play</string>
+    <string name="tab_daily">Daily</string>
+    <string name="badges">Badges</string>
+    <string name="new_badge">New badge: %1$s</string>
+    <string name="badge_locked">%1$s, locked: %2$s</string>
+    <string name="badge_unlocked">%1$s, earned: %2$s</string>
+    <string name="badge_first_win">First win</string>
+    <string name="badge_first_win_note">Win a game against the phone</string>
+    <string name="badge_every_size">All waters</string>
+    <string name="badge_every_size_note">Win on 8×8, 10×10 and 12×12</string>
+    <string name="badge_every_firing">Every way to fire</string>
+    <string name="badge_every_firing_note">Win in Classic, Hit again and Salvo</string>
+    <string name="badge_beat_hard">Admiral</string>
+    <string name="badge_beat_hard_note">Beat Hard</string>
+    <string name="badge_no_hints">On your own</string>
+    <string name="badge_no_hints_note">Win without hints</string>
+    <string name="badge_clean_sink">Clean sink</string>
+    <string name="badge_clean_sink_note">Sink a ship with no miss between its hits</string>
+    <string name="badge_streak">On a roll</string>
+    <string name="badge_streak_note">Win 5 games in a row in one mode</string>
+    <string name="badge_daily_streak">Every day</string>
+    <string name="badge_daily_streak_note">Play the daily challenge 7 days in a row</string>
+    <string name="badge_accuracy">Sharpshooter</string>
+    <string name="badge_accuracy_note">Win with 60% of your shots hitting</string>
+    <string name="howto_goal">The goal</string>
+    <string name="howto_goal_text">Each side hides a fleet on its grid. Fire at the enemy\'s grid to find and sink every ship before yours are sunk.</string>
+    <string name="howto_placement">Your fleet</string>
+    <string name="howto_placement_text">Drag each ship onto your grid and tap it to turn it. Ships may touch but not overlap. Random places them for you; Start begins the battle.</string>
+    <string name="howto_classic">Classic</string>
+    <string name="howto_classic_text">One shot per turn. A hit or a miss shows on the grid, and a sunk ship is named.</string>
+    <string name="howto_hit_again">Hit again</string>
+    <string name="howto_hit_again_text">Like Classic, but a hit lets you fire again. So does the enemy.</string>
+    <string name="howto_salvo">Salvo</string>
+    <string name="howto_salvo_text">Mark one shot per ship you still have afloat, then Fire. Lose ships and you fire fewer shots.</string>
+    <string name="howto_hints">Hints and score</string>
+    <string name="howto_hints_text">A hint marks five cells: one of them holds a ship. Up to 3 a game, 5 shots added to your score each. Fewer shots rank higher.</string>
+    <string name="howto_daily">Daily challenge</string>
+    <string name="howto_daily_text">The same board for everyone each day: 10×10, Classic, against Hard. Your first game of the day counts.</string>
+    <string name="howto_two_players">2 players</string>
+    <string name="howto_two_players_text">Pass the phone between turns: the screen hides until the next player taps.</string>
 </resources>

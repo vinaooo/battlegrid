@@ -9,10 +9,11 @@ import kotlinx.serialization.Serializable
 
 /**
  * A game being played: its seed (the AI's fleet and random choices) and the current state. This is what gets saved.
- * There is no undo: taking back a shot would show where the ships aren't.
+ * There is no undo: taking back a shot would show where the ships aren't. A game not [recorded] (a replay of the day's
+ * daily challenge) leaves no stats, scores or badges.
  */
 @Serializable
-data class GameSession(val seed: Long, val state: GameState) {
+data class GameSession(val seed: Long, val state: GameState, val recorded: Boolean = true) {
     /** The battle started and isn't over: abandoning it counts as a loss against the AI. Placement doesn't count. */
     val isInProgress: Boolean get() = state.isBattle
 

@@ -1,5 +1,6 @@
 package io.github.vinaooo.battlegrid.feature.game
 
+import io.github.vinaooo.battlegrid.domain.model.Achievement
 import io.github.vinaooo.battlegrid.domain.model.Coord
 import io.github.vinaooo.battlegrid.domain.model.Phase
 import io.github.vinaooo.battlegrid.domain.model.Ship
@@ -19,6 +20,10 @@ data class GameUiState(
     val revealing: Side? = null,
     /** Pass-and-play: the screen is covered until the next player taps. */
     val covered: Boolean = false,
+    /** The badges the game just finished earned, for the end dialog. */
+    val earned: Set<Achievement> = emptySet(),
+    /** The How-to-play screen hasn't been seen yet: it opens by itself once. */
+    val howToPlayDue: Boolean = false,
     val announcement: Announcement? = null,
     /** Counts announcements, so the same one twice in a row is spoken twice. */
     val announcementSequence: Int = 0,
@@ -72,6 +77,12 @@ sealed interface GameIntent {
     data object Resign : GameIntent
 
     data object NewGame : GameIntent
+
+    /** The day's daily challenge (a replay once its ranked game was played). */
+    data object Daily : GameIntent
+
+    /** The How-to-play screen opened. */
+    data object HowToPlaySeen : GameIntent
 
     data object Restart : GameIntent
 

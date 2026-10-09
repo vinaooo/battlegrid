@@ -16,9 +16,11 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import io.github.vinaooo.battlegrid.feature.game.badges.BadgesRoute
 import io.github.vinaooo.battlegrid.feature.game.scores.ScoresRoute
 import io.github.vinaooo.battlegrid.feature.game.settings.SettingsRoute
 import io.github.vinaooo.battlegrid.feature.game.ui.GameRoute
+import io.github.vinaooo.battlegrid.feature.game.ui.HowToPlayScreen
 import io.github.vinaooo.vinkit.ads.AdBannerProvider
 import kotlinx.serialization.Serializable
 
@@ -30,6 +32,12 @@ data object ScoresDestination
 
 @Serializable
 data object SettingsDestination
+
+@Serializable
+data object HowToPlayDestination
+
+@Serializable
+data object BadgesDestination
 
 /** The navigation host. Only the game screen carries the ad banner, at its bottom; Scores and Settings have none. */
 @Composable
@@ -53,12 +61,16 @@ fun BattleGridApp(
                     GameRoute(
                         onOpenScores = { navController.navigate(ScoresDestination) },
                         onOpenSettings = { navController.navigate(SettingsDestination) },
+                        onOpenHowToPlay = { navController.navigate(HowToPlayDestination) },
+                        onOpenBadges = { navController.navigate(BadgesDestination) },
                     )
                 }
                 adBanner.Banner(Modifier.navigationBarsPadding())
             }
         }
         composable<ScoresDestination> { ScoresRoute(onBack = navController::popBackStack) }
+        composable<HowToPlayDestination> { HowToPlayScreen(onBack = navController::popBackStack) }
+        composable<BadgesDestination> { BadgesRoute(onBack = navController::popBackStack) }
         composable<SettingsDestination> {
             SettingsRoute(
                 onBack = navController::popBackStack,

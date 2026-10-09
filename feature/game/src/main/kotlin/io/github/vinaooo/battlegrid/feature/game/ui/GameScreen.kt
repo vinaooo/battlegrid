@@ -9,11 +9,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ExitToApp
+import androidx.compose.material.icons.automirrored.rounded.HelpOutline
 import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material.icons.rounded.Lightbulb
+import androidx.compose.material.icons.rounded.MilitaryTech
 import androidx.compose.material.icons.rounded.Replay
 import androidx.compose.material.icons.rounded.RestartAlt
 import androidx.compose.material.icons.rounded.Shuffle
+import androidx.compose.material.icons.rounded.Today
 import androidx.compose.material.icons.rounded.TrackChanges
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -58,6 +61,7 @@ import io.github.vinaooo.vinkit.shell.GameToolbar
 import io.github.vinaooo.vinkit.shell.LocalFrameInfo
 import io.github.vinaooo.vinkit.shell.MenuOption
 import io.github.vinaooo.vinkit.shell.ModeAndTime
+import io.github.vinaooo.vinkit.shell.NavigationAction
 import io.github.vinaooo.vinkit.shell.R as ShellR
 import io.github.vinaooo.vinkit.shell.ToolbarAction
 import io.github.vinaooo.vinkit.shell.WinCelebration
@@ -71,14 +75,32 @@ fun GameRoute(
     modifier: Modifier = Modifier,
     onOpenScores: (() -> Unit)? = null,
     onOpenSettings: (() -> Unit)? = null,
+    onOpenHowToPlay: (() -> Unit)? = null,
+    onOpenBadges: (() -> Unit)? = null,
     viewModel: GameViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    // The first launch opens How to play once.
+    if (uiState.howToPlayDue && onOpenHowToPlay != null) {
+        LaunchedEffect(Unit) {
+            viewModel.onIntent(GameIntent.HowToPlaySeen)
+            onOpenHowToPlay()
+        }
+    }
     LifecycleResumeEffect(viewModel) {
         viewModel.onIntent(GameIntent.Resume)
         onPauseOrDispose { viewModel.onIntent(GameIntent.Pause) }
     }
-    GameScreen(uiState, viewModel::onIntent, modifier, onOpenScores, onOpenSettings, REPORT_TARGET)
+    GameScreen(
+        uiState,
+        viewModel::onIntent,
+        modifier,
+        onOpenScores,
+        onOpenSettings,
+        REPORT_TARGET,
+        onOpenHowToPlay,
+        onOpenBadges,
+    )
 }
 
 @Composable
@@ -89,6 +111,8 @@ fun GameScreen(
     onOpenScores: (() -> Unit)? = null,
     onOpenSettings: (() -> Unit)? = null,
     reportTarget: ReportTarget? = null,
+    onOpenHowToPlay: (() -> Unit)? = null,
+    onOpenBadges: (() -> Unit)? = null,
 ) {
     val state = uiState.session?.state
     val vsAi = state?.mode?.isVsAi ?: true
@@ -110,10 +134,13 @@ fun GameScreen(
             board = {
                 Board(uiState, onIntent)
             },
-            toolbar = { frame -> Toolbar(uiState, onIntent, frame, reportBug) },
+            toolbar = { frame -> Toolbar(uiState, onIntent, frame, reportBug, onOpenHowToPlay) },
             onOpenScores = onOpenScores,
             onOpenSettings = onOpenSettings,
             boardAspectRatio = null,
+            navigation = listOfNotNull(
+                onOpenBadges?.let { NavigationAction(Icons.Rounded.MilitaryTech, stringResource(R.string.badges), it) },
+            ),
         )
     }
     EndDialog(uiState, onNewGame = { onIntent(GameIntent.NewGame) })
@@ -147,7 +174,7 @@ private fun Info(uiState: GameUiState, frame: FrameInfo) {
     val turn = turnText(uiState)
     // ModeAndTime reads "mode, time, …"; the turn joins it as one item.
     Column(Modifier.semantics(mergeDescendants = true) {}) {
-        ModeAndTime(modeName(state.mode), state.elapsedSeconds, large = frame.landscape)
+        ModeAndTime(modeName(state.mode, uiState.session.recorded), state.elapsedSeconds, large = frame.landscape)
         Text(
             turn,
             style = if (frame.landscape) MaterialTheme.typography.titleMedium else MaterialTheme.typography.titleSmall,
@@ -162,6 +189,7 @@ private fun Toolbar(
     onIntent: (GameIntent) -> Unit,
     frame: FrameInfo,
     onReportBug: (() -> Unit)?,
+    onOpenHowToPlay: (() -> Unit)?,
 ) {
     val state = uiState.session?.state ?: return
     val placing = state.phase is Phase.Placement
@@ -205,6 +233,10 @@ private fun Toolbar(
                 }
             } else {
                 null
+            },
+            MenuOption(Icons.Rounded.Today, stringResource(R.string.daily)) { onIntent(GameIntent.Daily) },
+            onOpenHowToPlay?.let {
+                MenuOption(Icons.AutoMirrored.Rounded.HelpOutline, stringResource(R.string.how_to_play), it)
             },
         ),
         onReportBug = onReportBug,
@@ -261,7 +293,7 @@ private fun EndDialog(uiState: GameUiState, onNewGame: () -> Unit) {
     val shots = target.shots.size
     val accuracy = if (shots == 0) 0 else (target.hits * PERCENT / shots.toFloat()).roundToInt()
     val lines = buildList {
-        add(modeName(state.mode))
+        add(modeName(state.mode, checkNotNull(uiState.session).recorded))
         add(pluralStringResource(R.plurals.shots_count, shots, shots))
         add(stringResource(R.string.accuracy, accuracy))
         add(stringResource(R.string.time, formatElapsed(state.elapsedSeconds)))
@@ -275,6 +307,7 @@ private fun EndDialog(uiState: GameUiState, onNewGame: () -> Unit) {
                 },
             )
         }
+        uiState.earned.forEach { add(stringResource(R.string.new_badge, badgeName(it))) }
     }
     WinDialog(
         lines = lines,

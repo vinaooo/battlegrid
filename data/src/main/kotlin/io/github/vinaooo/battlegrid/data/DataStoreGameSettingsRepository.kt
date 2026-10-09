@@ -2,6 +2,7 @@ package io.github.vinaooo.battlegrid.data
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import io.github.vinaooo.battlegrid.domain.model.GameMode
@@ -26,6 +27,7 @@ class DataStoreGameSettingsRepository(private val dataStore: DataStore<Preferenc
             prefs[OPPONENT] = settings.mode.opponent.name
             val first = settings.nextFirstMover
             if (first == null) prefs.remove(NEXT_FIRST_MOVER) else prefs[NEXT_FIRST_MOVER] = first.name
+            prefs[HOW_TO_PLAY_SEEN] = settings.howToPlaySeen
         }
     }
 
@@ -38,6 +40,7 @@ class DataStoreGameSettingsRepository(private val dataStore: DataStore<Preferenc
                 opponent = enumOrDefault(this[OPPONENT], defaults.opponent),
             ),
             nextFirstMover = Side.entries.firstOrNull { it.name == this[NEXT_FIRST_MOVER] },
+            howToPlaySeen = this[HOW_TO_PLAY_SEEN] ?: false,
         )
     }
 
@@ -49,5 +52,6 @@ class DataStoreGameSettingsRepository(private val dataStore: DataStore<Preferenc
         val FIRING_MODE = stringPreferencesKey("firing_mode")
         val OPPONENT = stringPreferencesKey("opponent")
         val NEXT_FIRST_MOVER = stringPreferencesKey("next_first_mover")
+        val HOW_TO_PLAY_SEEN = booleanPreferencesKey("how_to_play_seen")
     }
 }
