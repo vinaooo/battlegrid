@@ -25,13 +25,14 @@ fixed in vinkit and released before the game uses them.
 | Helps | no undo / redo in battle; hint = 5 untried cells, exactly 1 is a ship cell; max 3 per game; off in 2-player |
 | Timer | count-up, shown, battle only, no limit |
 | Input | battle: tap fires at once (Classic, Hit-again); Salvo: tap marks / unmarks, toolbar Fire button |
-| Look | flat sea, capsule ships, hit burst, miss ring, sunk ship outlined and dimmed; portrait = enemy grid big + own mini (fixed: the grids never swap); landscape / tablet = side by side |
+| Look | flat sea, capsule ships, hit burst, miss ring, a sunk ship shown under its hits; portrait = enemy grid big + own mini (fixed: the grids never swap); landscape / tablet = side by side |
 | Settings → Game | Board size (`Choice`), Firing mode (`Choice`), Opponent (`IconChoice`: Easy / Medium / Hard / 2 players) |
 | Extras | How-to-play screen, sounds (miss / hit / sunk), daily challenge (10×10 Classic vs Hard, UTC date seed, 1 ranked attempt), 9 local achievements on their own screen (a button beside Scores) |
 
 ## Project defaults (veto any)
 - Languages pt-BR + en; portrait + landscape, phones and tablets (phone view on tablets).
-- One placeholder banner (`PlaceholderAdBanner`) on the game screen only; real AdMob + consent later.
+- One AdMob banner (vinkit's `AdMobBanner`, consent by `DefaultAdConsent`) on the game screen only; Google's test IDs
+  until the real ones are set.
 - No online services, no Play Games.
 - Bug report `ReportTarget("vrpedrinho+battlegrid@gmail.com", "vinaooo/battlegrid")`.
 - Privacy policy `https://vinaooo.github.io/battlegrid/privacy.html` (`#en`, `#pt-br`).
@@ -42,21 +43,21 @@ fixed in vinkit and released before the game uses them.
 
 ## Implementation defaults (veto any)
 1. **Mode keys:** `<SIZE>_<FIRE>_<LEVEL>`, e.g. `TEN_SALVO_HARD` (27 AI modes) + `DAILY`. Never renamed after release.
-2. **Scores tabs:** grouped by board size (`groupOf`), a section per firing mode × difficulty; `DAILY` and
-   Achievements get their own tabs.
+2. **Scores tabs:** grouped by board size (`groupOf`), a section per firing mode × difficulty; `DAILY` gets its
+   own tab. Badges have their own screen (a button beside Scores).
 3. **AI randomness:** `Random(seed * 31 + actions)` (`actions` = applied battle moves; a whole salvo is one), frozen after release.
 4. **Hint randomness:** `Random(seed * 37 + hintsUsed)`, so a hint is the same after process death.
 5. **Hit-again with Salvo** is not a combination (they are values of one setting).
 6. **Info area:** mode ("10×10 · Salvo · Hard"), whose turn ("Your turn", "Enemy firing", "Player 2's turn"), in
-   Salvo "3 shots"; stats: shots, hits, time.
+   Salvo "3 shots"; the battle time.
 7. **Toolbar:** hint, Fire (Salvo only, enabled at N marks), new game. Undo / redo hidden (`visible = false`);
    during placement: Random and Start.
 8. **New-game menu:** new game, restart this board, resign (battle only), how to play, daily challenge, report a bug.
-9. **End:** win → `WinDialog` (shots, accuracy %, time, hints) with celebration; loss → same dialog "You lost", no
+9. **End:** win → `WinDialog` (mode, shots, accuracy %, time, hints, new badges) with celebration; loss → same dialog "You lost", no
     celebration. Pass-and-play: "Player 1 wins".
 10. **Daily storage:** day streak and the last daily date are the game's own DataStore keys.
-11. **Achievements:** a set of unlocked ids in the game's DataStore keys, checked by a pure `AchievementRules` after
-    each finished game; an unlock shows a snackbar.
+11. **Achievements:** vinkit's achievements module (`DataStoreAchievementRepository`, `achievements_*` keys), the
+    rules in a pure `Achievements.after` after each finished game; new badges are listed in the end dialog.
 12. **TalkBack:** one node per cell ("B 7, miss" / "C 3, hit, Cruiser sunk" / "D 4, untried"), click = fire;
     placement: custom actions per ship (move left / right / up / down, rotate); shots announced, the AI's included.
 13. **Pieces' colors:** ships `secondary`, hit `error`, miss `outline`, sea `surfaceContainerHigh`, with contrast
@@ -73,46 +74,49 @@ fixed in vinkit and released before the game uses them.
 - **Restart in pass-and-play:** both players place again; only the Random button's layouts repeat.
 - **Hint highlight:** stays until the next shot.
 
-## vinkit gaps (one kit release inside milestone 2, as OX Play did)
-- `core`: `Ranking.LOWEST_POINTS` (fewest points first, then fastest) and its SQL query in `scores`; `ScoresScreen`
-  rows show it like points.
-- `shell`: `FeedbackEvent` has only `MOVE`, `REJECTED`, `WIN`. Games need their own sounds (miss, hit, sunk, loss):
-  let `AndroidGameFeedback` take extra sound resources keyed by game events (non-breaking: keep the enum's three).
-- `scores`: `ScoresScreen` can't show a game's own tab (achievements): add an `extraGroups` slot (a name + a
-  composable) after the mode groups.
+## vinkit gaps (all released; the game uses them)
+- `core` + `scores`: `Ranking.LOWEST_POINTS` (fewest points first, then fastest), shown like points.
+- `shell`: `AndroidGameFeedback(sounds = …)` plays a game's own sounds by name (`miss`, `hit`, `sunk`) beside the
+  kit's `MOVE`, `REJECTED`, `WIN`.
+- `scores`: `ScoresScreen(extra = …)` draws a game's own tabs (not used here).
+- `shell` 0.7.0: `GameFrame(navigation = …)`, the Badges button beside Scores.
+- `achievements` 0.8.0: `AchievementProgress`, `DataStoreAchievementRepository`, `BadgesScreen`.
 - Whatever else comes up while building goes to this list.
 
 ## Modules
 ```
-:app ─► :feature:game, :data, vinkit settings / scores / shell / ads / designsystem
-:feature:game ─► :domain, vinkit shell / designsystem / settings / scores / bugreport
-:data ─► :domain, vinkit settings / scores
+:app ─► :feature:game, :data, :domain, vinkit designsystem / shell / ads
+:feature:game ─► :domain, vinkit shell / bugreport / designsystem / settings / scores / achievements
+:data ─► :domain, vinkit settings / scores / achievements
 :domain   pure Kotlin/JVM: fleet, rules, AI, hints, session, use cases (vinkit core)
 ```
 No `build-logic`, no own catalog, no `:feature:scores` / `:feature:settings`: vinkit's.
 
 ## Domain design
-- `Coord(row, col)`, `Orientation`, `ShipClass(nameKey, length)`, `Ship(class, origin, orientation)`,
-  `Fleet(ships)` with `cells`, `isValid(size)`; `FleetSpec.forSize(size)`.
-- `Grid(size, fleet, shots: Map<Coord, ShotResult>)` per side; `ShotResult` = `Miss` / `Hit` / `Sunk(shipIndex)`.
-- `GameMode(size, fire, opponent)` + `key`; `GameState(mode, phase, grids, toMove, salvoMarks, actions,
-  hintsUsed, hint, elapsed, status)`; `phase` = `Placement(side)` / `Battle` / `Over(winner)`. All `@Serializable`.
-- `Move` sealed: `PlaceShip`, `RotateShip`, `RandomFleet`, `ConfirmFleet`, `Fire(coord)`, `MarkSalvo(coord)`,
-  `FireSalvo`, `Resign`.
-- `RuleSet` with one rule object per move type; `FiringRule` per mode (`ClassicFiring`, `HitAgainFiring`,
+- `Coord(row, col)`, `Orientation`, `ShipClass(length)`, `Ship(type, origin, orientation)` with `cells`;
+  `BoardSize(side, fleet)`.
+- `Grid(size, ships: List<Ship?>, shots: List<Coord>)` per side; `ShotResult` = `MISS` / `HIT` / `SUNK`, derived
+  (`resultAt`, `isSunk`), never stored.
+- `GameMode(size, firing, opponent, daily)` + `key`; `GameState(mode, player, enemy, phase, toMove, firstMover,
+  salvoMarks, hintsUsed, hint, elapsedSeconds, actions)`; `phase` = `Placement(side)` / `Battle` /
+  `Over(winner, resigned)`. All `@Serializable`.
+- `Move` sealed: `PlaceShip`, `RotateShip`, `SetFleet`, `ConfirmFleet`, `Fire(coord)`, `MarkSalvo(coord)`,
+  `FireSalvo`, `ShowHint`, `Resign(side)`.
+- One `MoveRule` per move type (`rules/Rules.kt`); `FiringRule` per mode (`ClassicFiring`, `HitAgainFiring`,
   `SalvoFiring`) decides shots per turn and who moves next. `GameEngine.apply` → `Applied` / `Rejected`;
   `legalMoves`, `isLegal`.
 - `ScoringStrategy`: `ShotsScoring` (points = shots + 5 × hints, ranking `LOWEST_POINTS`).
-- `FleetPlacer` (seeded random valid fleet, attempt-counted retries).
-- `Opponent` interface: `RandomAi`, `HuntTargetAi`, `ProbabilityAi`; `:domain:benchmarkAi` reports average shots to
-  win per level and size over N seeds.
-- `HintEngine`: 1 cell of an unsunk ship + 4 untried water cells (fewer when water runs out), seeded.
-- No `UndoHistory` in battle (decided); placement edits are moves on the state, not history.
-- `GameSession(seed, state)`; codec = vinkit `GameCodec`.
-- Use cases: start (an unfinished vs-AI battle counts as a loss; placement doesn't), fire, finish (records score,
-  stats, daily, achievements; clears the save), resign, daily.
-- Repositories: `SavedGameRepository`, `GameSettingsRepository`, `DailyRepository`, `AchievementRepository`,
-  `SeedSource`, `Clock` (+ vinkit's). Fakes in `testFixtures`.
+- `FleetPlacer`: `RandomFleetPlacer` (seeded, picks each ship among the spots still free, never retries).
+- `Ai`: `EasyAi`, `MediumAi`, `HardAi`, each seeing only a `TargetView`; `:domain:benchmarkAi` reports average shots
+  to win per level and size over N seeds.
+- `HintEngine`: 1 cell of an unsunk ship + 4 untried water cells (fewer when water runs out), seeded; max 3.
+- No undo in battle (decided); placement edits are moves on the state, not history.
+- `GameSession(seed, state, recorded)`; codec = vinkit `GameCodec`.
+- Use cases: `StartNewGame` / `RestartGame` (an unfinished vs-AI battle counts as a loss; placement doesn't),
+  `StartDailyGame`, `ResumeGame`, `SaveGame`, `FinishGame` (records score, stats, daily, achievements),
+  `RecordProgress`.
+- Repositories: `SavedGameRepository`, `GameSettingsRepository`, `DailyRepository`, `SeedSource`, `Clock`, plus
+  vinkit's (`AchievementRepository` and the settings / scores ones). Fakes in `testFixtures`.
 - Tests: every rule per firing mode and size; property tests (random fleets are always valid, any legal sequence
   keeps the state valid, no cell shot twice, sunk only when every cell is hit, same seed same game, `legalMoves`
   agrees with `isLegal`); codec round trip; hint always has exactly one ship cell; AI benchmark ordering
@@ -123,10 +127,10 @@ No `build-logic`, no own catalog, no `:feature:scores` / `:feature:settings`: vi
 - `:data`: Robolectric + Turbine: save / restore round trip, corrupt and unknown-version files, the game's keys
   beside vinkit's in one DataStore.
 - ViewModels: Turbine + `StandardTestDispatcher`: placement, firing in each mode, AI reply and its cancellation,
-  auto-swap, covers, hint, win / loss / resign, daily and achievements, settings changes that confirm; every test
+  covers, hint, win / loss / resign, daily and achievements, settings changes that confirm; every test
   pauses its ViewModels in a `finally`.
 - UI (Compose on Robolectric): placement drag (stepped `moveBy`), rotate, Random, firing taps, Salvo marks and Fire,
-  grid swap, dialogs, menus, both orientations, TalkBack nodes.
+  dialogs, menus, both orientations, TalkBack nodes.
 - App: Hilt + Robolectric, banner on the game screen only, consent once at launch, ads faked via `@TestInstallIn`.
 - On-device: Hilt instrumented tests with the orchestrator (`clearPackageData`) on `Solo_API_26` and
   `Pixel_9a_Android_16`, local only.
@@ -140,9 +144,9 @@ No `build-logic`, no own catalog, no `:feature:scores` / `:feature:settings`: vi
    scoring, session, codec.
 3. Domain extras: fleet placer, AI Easy / Medium / Hard + benchmark, hint engine.
 4. Data: use cases, saved game file, settings keys, vinkit settings + scores wiring.
-5. Game screen: placement (drag, rotate, Random, Start), battle (two grids, swap, Salvo marks), pass-and-play
+5. Game screen: placement (drag, rotate, Random, Start), battle (two grids, Salvo marks), pass-and-play
    covers, end dialog, feedback, TalkBack.
-6. Settings, Scores (with the Achievements tab), navigation, ads placeholder, bug report.
+6. Settings, Scores, navigation, ads placeholder, bug report.
 7. Daily challenge and achievements (with their DataStore keys), How-to-play screen, game sounds.
 8. Adaptive layouts, pt-BR, accessibility pass, screenshots, launcher icon.
 9. Release prep: signing, Play workflow (off), privacy policy, store kit and checklist.
@@ -157,14 +161,14 @@ data safety, content rating, audience 13+, ads / advertising-ID declarations; up
 - Gate (in pieces, low RAM): `./gradlew ktlintCheck detekt`, `./gradlew test verifyRoborazziDebug koverVerify`,
   `./gradlew lint`, `:domain:pitest` after domain changes.
 - On your Moto and the emulators: placement drag / rotate / Random, every firing mode and size vs each AI level,
-  pass-and-play covers, grid swap and auto-swap, hints, resign, daily, achievements, rotation, tablet phone view,
+  pass-and-play covers, hints, resign, daily, achievements, rotation, tablet phone view,
   themes, both languages, Scores, bug report (GitHub path only), ads and consent on `Pixel_9a_Android_16`.
 
-## Status (handoff, 2026-10-08)
-Done and merged: milestones 1–7 (PRs #1–#8), vinkit 0.6.0 and 0.7.0 (`vinkit.tag=0.7.0`). PR #9 (milestone 8, part 1:
-launcher icon + Roborazzi goldens) is open; merge it first.
+## Status (handoff, 2026-10-09)
+Done and merged: milestones 1–7 and milestone 8 part 1 (PRs #1–#9), badges on vinkit 0.8.0's achievements module
+(PR #10); `vinkit.tag=0.8.0`.
 
-Next, milestone 8 part 2 (branch from `master` after #9 merges):
+Next, milestone 8 part 2 (branch from `master`):
 1. TalkBack pass on an emulator (`Pixel_9a_Android_16`): on the Moto, `uiautomator` reported the target grid's cell
    nodes about a cell off while touches and Robolectric bounds are right; find out whether TalkBack's
    explore-by-touch reads the wrong cell, and fix it if so.
