@@ -15,7 +15,7 @@ and their defaults, is `PLAN.md`.
 - applicationId and package `io.github.vinaooo.battlegrid`; app name "BattleGrid" (`app_name`); brand color teal.
 - Built on **vinkit** (`../vinkit`, github.com/vinaooo/vinkit): build-logic plugins (`vinkit.*`), the version
   catalog, theme, ads, bug report, settings, scores and the game screen shell come from it. OX Play (`../xo`) is the
-  reference game.
+  reference for wiring vinkit (the first game built on it); no game is a visual reference *(user, 2026-10-09)*.
   - Always the newest published vinkit tag (`vinkit.tag` in `gradle.properties`), from JitPack; never a local
     `includeBuild` of vinkit (user's rule).
   - A kit gap found here is fixed in vinkit, released as a new tag, and then used here. Never bump the other games.
@@ -116,8 +116,7 @@ and their defaults, is `PLAN.md`.
   never rename. `FinishGame` returns the ones just earned; the end dialog lists them. Their screen (`badges/`) is
   opened by a button beside Scores (vinkit 0.7.0 `GameFrame(navigation = …)`).
 - How to play opens by itself once (`GameSettings.howToPlaySeen`), and from the new-game menu.
-- Sounds: `app/src/main/res/raw/sfx_*.wav`, made by `python3 tools/sfx.py app/src/main/res/raw` (synthesized, no
-  third-party audio), played by name through vinkit's `AndroidGameFeedback(sounds = …)`.
+- Sounds: see Game identity → Motion and feedback.
 
 ## Icon and screenshots
 
@@ -133,6 +132,7 @@ and their defaults, is `PLAN.md`.
 
 - **Visual metaphor:** to be defined: a prototype comes before the decision *(user)*. Today: a flat sea grid seen
   from above, A–L / 1–12 labels *(code)*. Mood: tense naval combat, keeping Material 3 Expressive's elements *(user)*.
+  The metaphor is decided before the first release *(user)*.
 - **Game tokens:** `BoardColors` (`board/BoardColors.kt`) in `LocalBoardColors`, built from
   `MaterialTheme.colorScheme` by `ProvideBoardColors` (around the board in `GameScreen`; tests wrap it too): sea
   `surfaceContainerHigh`, line `outlineVariant`, label `onSurfaceVariant`, ship `secondary`, hit `error`, hitOnShip
@@ -145,23 +145,25 @@ and their defaults, is `PLAN.md`.
 - **Motion and feedback:** the last shot springs in (`motionScheme.fastSpatialSpec`); a dragged ship lifts ×1.06;
   pauses as in Game screen; end dialog after 1.2 s, random `WinCelebration`. Game sounds `miss` / `hit` / `sunk`
   (`GameViewModel.SOUND_*`, `app/di/GameModule`) with the kit's haptics MOVE / MOVE / WIN; kit sounds: `REJECTED`
-  (refused tap or drop), `WIN` (a celebrated win) *(code)*.
+  (refused tap or drop), `WIN` (a celebrated win). Game sounds are `app/src/main/res/raw/sfx_*.wav`, made by
+  `python3 tools/sfx.py app/src/main/res/raw` (synthesized, no third-party audio), played by name through
+  `AndroidGameFeedback(sounds = …)` *(code)*.
 - **vinkit extension points used:** `SettingsScreen(gameSections)`: Game (Board, Firing `Choice`, Opponent
-  `IconChoice`). `ScoresScreen`: `groupName` (sizes + Daily), `modeName`, `details` (hints), `points` (shots);
-  `extra` unused. `WinDialog(lines, title, kind)`: mode, shots, accuracy, time, hints, new badges.
+  `IconChoice`). `ScoresScreen`: `groupName` (sizes + Daily), `modeName`, `details` (hints), `points` (shots).
+  `WinDialog(lines, title, kind)`: mode, shots, accuracy, time, hints, new badges.
   `GameFrame(navigation)`: Badges. `GameToolbar` + `MenuOption`, `AndroidGameFeedback(sounds)`,
   `BadgesScreen(battleGridBadges())`, `GameSurface(gameReport)` *(code)*.
 - **Game achievements:** 9 `Achievement`s, texts `badge_*` / `badge_*_note`: First win, All waters, Every way to
-  fire, Admiral, On your own, Clean sink, On a roll, Every day, Sharpshooter. No own icons (vinkit's `Badge` has
-  none) *(code)*.
+  fire, Admiral, On your own, Clean sink, On a roll, Every day, Sharpshooter. No own icons; the kit's `Badge` has
+  none *(code)*.
 - **Do not:**
   - use colors outside `colorScheme` / `BoardColors`; never hardcode one *(user)*;
   - change the shot glyphs: miss = ring, hit = burst, salvo mark = crosshair, hint = the same frame on all five
     *(user)*;
   - build own Settings, Scores, Badges, toolbar, new-game menu or end dialog: extend vinkit's *(code)*;
   - draw anything that tells hint cells apart or shows unsunk enemy ships, or swap the grids (Game screen) *(code)*.
-- **Open to experimentation:** shot animations, ship and sea drawing, sound timbre (the Sounds rule above still
-  holds), the Cover and How to play look *(user)*.
+- **Open to experimentation:** shot animations, ship and sea drawing, sound timbre (made as in Motion and
+  feedback), the Cover and How to play look *(user)*.
 
 ## Git
 
