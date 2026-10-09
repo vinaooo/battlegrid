@@ -15,6 +15,7 @@ dependencies {
     implementation("com.github.vinaooo.vinkit:designsystem:$vinkit")
     implementation("com.github.vinaooo.vinkit:settings:$vinkit")
     implementation("com.github.vinaooo.vinkit:scores:$vinkit")
+    implementation("com.github.vinaooo.vinkit:achievements:$vinkit")
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.androidx.compose.material.icons.extended)
 

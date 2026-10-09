@@ -6,8 +6,9 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import io.github.vinaooo.battlegrid.domain.repository.AchievementRepository
 import io.github.vinaooo.battlegrid.domain.repository.DailyRepository
+import io.github.vinaooo.vinkit.achievements.DataStoreAchievementRepository
+import io.github.vinaooo.vinkit.core.AchievementRepository
 import javax.inject.Singleton
 
 /** The daily challenge's record and the badges, in the settings' DataStore. */

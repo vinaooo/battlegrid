@@ -4,7 +4,6 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import io.github.vinaooo.battlegrid.domain.repository.AchievementRepository
 import io.github.vinaooo.battlegrid.domain.repository.Clock
 import io.github.vinaooo.battlegrid.domain.repository.DailyRepository
 import io.github.vinaooo.battlegrid.domain.repository.GameSettingsRepository
@@ -18,6 +17,7 @@ import io.github.vinaooo.battlegrid.domain.usecase.ResumeGame
 import io.github.vinaooo.battlegrid.domain.usecase.SaveGame
 import io.github.vinaooo.battlegrid.domain.usecase.StartDailyGame
 import io.github.vinaooo.battlegrid.domain.usecase.StartNewGame
+import io.github.vinaooo.vinkit.core.AchievementRepository
 import io.github.vinaooo.vinkit.core.ScoreRepository
 import io.github.vinaooo.vinkit.core.StatsRepository
 

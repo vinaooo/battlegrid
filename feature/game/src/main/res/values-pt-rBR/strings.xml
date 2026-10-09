@@ -97,8 +97,6 @@
     <string name="tab_daily">Diário</string>
     <string name="badges">Medalhas</string>
     <string name="new_badge">Nova medalha: %1$s</string>
-    <string name="badge_locked">%1$s, bloqueada: %2$s</string>
-    <string name="badge_unlocked">%1$s, conquistada: %2$s</string>
     <string name="badge_first_win">Primeira vitória</string>
     <string name="badge_first_win_note">Vença um jogo contra o celular</string>
     <string name="badge_every_size">Todos os mares</string>

@@ -200,8 +200,9 @@ class GameScreenTest {
     fun `the badges page reads each badge as earned or locked`() {
         compose.setContent {
             VinkitTheme(ThemeColor.TEAL) {
-                io.github.vinaooo.battlegrid.feature.game.badges.BadgesScreen(
-                    setOf(io.github.vinaooo.battlegrid.domain.model.Achievement.FIRST_WIN),
+                io.github.vinaooo.vinkit.achievements.BadgesScreen(
+                    io.github.vinaooo.battlegrid.feature.game.badges.battleGridBadges(),
+                    setOf("FIRST_WIN"),
                     onBack = {},
                 )
             }

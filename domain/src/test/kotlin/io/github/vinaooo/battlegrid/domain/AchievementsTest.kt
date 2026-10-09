@@ -1,7 +1,6 @@
 package io.github.vinaooo.battlegrid.domain
 
 import io.github.vinaooo.battlegrid.domain.model.Achievement
-import io.github.vinaooo.battlegrid.domain.model.AchievementProgress
 import io.github.vinaooo.battlegrid.domain.model.Achievements
 import io.github.vinaooo.battlegrid.domain.model.BoardSize
 import io.github.vinaooo.battlegrid.domain.model.Coord
@@ -10,7 +9,11 @@ import io.github.vinaooo.battlegrid.domain.model.GameState
 import io.github.vinaooo.battlegrid.domain.model.Move
 import io.github.vinaooo.battlegrid.domain.model.Opponent
 import io.github.vinaooo.battlegrid.domain.model.Side
+import io.github.vinaooo.battlegrid.domain.model.badges
+import io.github.vinaooo.battlegrid.domain.model.firingsWon
+import io.github.vinaooo.battlegrid.domain.model.sizesWon
 import io.github.vinaooo.battlegrid.domain.rules.GameEngine
+import io.github.vinaooo.vinkit.core.AchievementProgress
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
@@ -42,7 +45,7 @@ class AchievementsTest {
     @Test
     fun `a first clean win without hints earns its badges`() {
         val after = Achievements.after(AchievementProgress(), won(), streak = 1, dailyStreak = null)
-        after.unlocked shouldContainExactlyInAnyOrder listOf(
+        after.badges shouldContainExactlyInAnyOrder listOf(
             Achievement.FIRST_WIN,
             Achievement.NO_HINT_WIN,
             Achievement.CLEAN_SINK,
@@ -64,7 +67,7 @@ class AchievementsTest {
                 }.zip(water) { a, b -> listOf(a, b) }.flatten(),
             ),
         )
-        Achievements.after(AchievementProgress(), interleaved, streak = 1, dailyStreak = null).unlocked shouldBe
+        Achievements.after(AchievementProgress(), interleaved, streak = 1, dailyStreak = null).badges shouldBe
             setOf(Achievement.FIRST_WIN)
     }
 
@@ -74,28 +77,28 @@ class AchievementsTest {
         BoardSize.entries.forEachIndexed { i, size ->
             progress = Achievements.after(progress, won(size, FiringMode.entries[i], Opponent.HARD), 1, null)
         }
-        progress.unlocked.containsAll(
+        progress.badges.containsAll(
             listOf(Achievement.BEAT_HARD, Achievement.WIN_EVERY_SIZE, Achievement.WIN_EVERY_FIRING),
         ) shouldBe true
         Achievements.after(AchievementProgress(), won(opponent = Opponent.MEDIUM), 1, null)
-            .unlocked.contains(Achievement.BEAT_HARD) shouldBe false
+            .badges.contains(Achievement.BEAT_HARD) shouldBe false
     }
 
     @Test
     fun `streaks of five wins, and of seven days of the daily`() {
         Achievements.after(AchievementProgress(), won(), streak = 5, dailyStreak = null)
-            .unlocked.contains(Achievement.WIN_STREAK_5) shouldBe true
+            .badges.contains(Achievement.WIN_STREAK_5) shouldBe true
         Achievements.after(AchievementProgress(), won(), streak = 4, dailyStreak = 6)
-            .unlocked.contains(Achievement.WIN_STREAK_5) shouldBe false
+            .badges.contains(Achievement.WIN_STREAK_5) shouldBe false
         // The daily streak counts days played, won or lost.
-        Achievements.after(AchievementProgress(), lost(won()), streak = 0, dailyStreak = 7).unlocked shouldBe
+        Achievements.after(AchievementProgress(), lost(won()), streak = 0, dailyStreak = 7).badges shouldBe
             setOf(Achievement.DAILY_STREAK_7, Achievement.CLEAN_SINK)
     }
 
     @Test
     fun `a loss earns no win badges and adds no size or firing mode`() {
         val after = Achievements.after(AchievementProgress(), lost(won(misses = listOf(Coord(1, 0)))), 0, null)
-        after.unlocked shouldBe setOf(Achievement.CLEAN_SINK)
+        after.badges shouldBe setOf(Achievement.CLEAN_SINK)
         after.sizesWon shouldBe emptySet()
     }
 
@@ -113,8 +116,23 @@ class AchievementsTest {
 
     @Test
     fun `earlier badges stay, and the daily streak alone counts without a win`() {
-        val start = AchievementProgress(unlocked = setOf(Achievement.FIRST_WIN))
-        Achievements.after(start, lost(engine.play(engine.battle(), Move.Resign(Side.PLAYER))), 0, 1).unlocked shouldBe
+        val start = AchievementProgress(unlocked = setOf(Achievement.FIRST_WIN.name))
+        Achievements.after(start, lost(engine.play(engine.battle(), Move.Resign(Side.PLAYER))), 0, 1).badges shouldBe
             setOf(Achievement.FIRST_WIN)
+    }
+
+    @Test
+    fun `names a newer version stored are kept`() {
+        val start = AchievementProgress(
+            setOf("MOON_LANDING"),
+            mapOf(
+                "sizes_won" to setOf("SIXTEEN"),
+                "other" to setOf("x"),
+            ),
+        )
+        val after = Achievements.after(start, won(), streak = 1, dailyStreak = null)
+        after.unlocked.contains("MOON_LANDING") shouldBe true
+        after.collected["sizes_won"] shouldBe setOf("SIXTEEN", "TEN")
+        after.collected["other"] shouldBe setOf("x")
     }
 }

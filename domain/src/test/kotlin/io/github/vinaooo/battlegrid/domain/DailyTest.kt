@@ -12,6 +12,7 @@ import io.github.vinaooo.battlegrid.domain.model.Achievement
 import io.github.vinaooo.battlegrid.domain.model.GameMode
 import io.github.vinaooo.battlegrid.domain.model.Move
 import io.github.vinaooo.battlegrid.domain.model.Side
+import io.github.vinaooo.battlegrid.domain.model.badges
 import io.github.vinaooo.battlegrid.domain.placement.RandomFleetPlacer
 import io.github.vinaooo.battlegrid.domain.repository.DailyRecord
 import io.github.vinaooo.battlegrid.domain.rules.GameEngine
@@ -89,7 +90,7 @@ class DailyTest {
         val result = finish(startDaily().inBattle().play(Move.Resign(Side.PLAYER), engine)!!)
         daily.current.value shouldBe DailyRecord(20_000, 7)
         result shouldContain Achievement.DAILY_STREAK_7
-        achievements.current.value.unlocked shouldContain Achievement.DAILY_STREAK_7
+        achievements.current.value.badges shouldContain Achievement.DAILY_STREAK_7
 
         daily.current.value = DailyRecord(lastRankedDay = 19_990, streak = 6)
         clock.now = 20_000L * DAY
@@ -117,7 +118,7 @@ class DailyTest {
         val mode = GameMode.DEFAULT.copy(opponent = io.github.vinaooo.battlegrid.domain.model.Opponent.TWO_PLAYER)
         val twoPlayer = start(mode).inBattle().inBattle()
         finish(twoPlayer.play(Move.Resign(Side.ENEMY), engine)!!) shouldBe emptySet()
-        achievements.current.value.unlocked shouldBe emptySet()
+        achievements.current.value.badges shouldBe emptySet()
     }
 
     private companion object {

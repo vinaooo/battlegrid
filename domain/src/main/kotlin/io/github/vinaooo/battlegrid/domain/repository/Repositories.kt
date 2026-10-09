@@ -1,6 +1,5 @@
 package io.github.vinaooo.battlegrid.domain.repository
 
-import io.github.vinaooo.battlegrid.domain.model.AchievementProgress
 import io.github.vinaooo.battlegrid.domain.model.GameMode
 import io.github.vinaooo.battlegrid.domain.model.Side
 import io.github.vinaooo.battlegrid.domain.session.GameSession
@@ -37,12 +36,6 @@ interface DailyRepository {
     val record: Flow<DailyRecord>
 
     suspend fun update(transform: (DailyRecord) -> DailyRecord)
-}
-
-interface AchievementRepository {
-    val progress: Flow<AchievementProgress>
-
-    suspend fun update(transform: (AchievementProgress) -> AchievementProgress)
 }
 
 fun interface SeedSource {

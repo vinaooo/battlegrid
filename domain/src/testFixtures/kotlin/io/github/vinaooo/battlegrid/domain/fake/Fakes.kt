@@ -1,7 +1,5 @@
 package io.github.vinaooo.battlegrid.domain.fake
 
-import io.github.vinaooo.battlegrid.domain.model.AchievementProgress
-import io.github.vinaooo.battlegrid.domain.repository.AchievementRepository
 import io.github.vinaooo.battlegrid.domain.repository.Clock
 import io.github.vinaooo.battlegrid.domain.repository.DailyRecord
 import io.github.vinaooo.battlegrid.domain.repository.DailyRepository
@@ -10,6 +8,8 @@ import io.github.vinaooo.battlegrid.domain.repository.GameSettingsRepository
 import io.github.vinaooo.battlegrid.domain.repository.SavedGameRepository
 import io.github.vinaooo.battlegrid.domain.repository.SeedSource
 import io.github.vinaooo.battlegrid.domain.session.GameSession
+import io.github.vinaooo.vinkit.core.AchievementProgress
+import io.github.vinaooo.vinkit.core.AchievementRepository
 import io.github.vinaooo.vinkit.core.GameStats
 import io.github.vinaooo.vinkit.core.Ranking
 import io.github.vinaooo.vinkit.core.ScoreRecord
