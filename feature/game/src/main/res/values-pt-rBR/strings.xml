@@ -77,4 +77,19 @@
     <string name="move_right">Mover para a direita</string>
     <string name="rotate">Girar</string>
     <string name="place_on_grid">Colocar na grade</string>
+
+    <string name="section_game">Jogo</string>
+    <string name="board">Tabuleiro</string>
+    <string name="firing">Disparo</string>
+    <string name="opponent">Adversário</string>
+    <string name="opponent_easy_note">Atira ao acaso</string>
+    <string name="opponent_medium_note">Atira ao acaso até acertar, depois afunda esse navio</string>
+    <string name="opponent_hard_note">Mira onde ainda cabem navios, em xadrez</string>
+    <string name="opponent_two_player_note">Duas pessoas neste celular, passando-o a cada vez</string>
+    <string name="new_game_not_counted">Isto vai começar um novo jogo. O jogo atual será perdido.</string>
+    <string name="privacy_policy_url">https://vinaooo.github.io/battlegrid/privacy.html#pt-br</string>
+    <plurals name="hints_used">
+        <item quantity="one">%d dica</item>
+        <item quantity="other">%d dicas</item>
+    </plurals>
 </resources>
