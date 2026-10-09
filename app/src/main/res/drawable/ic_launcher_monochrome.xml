@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Themed icons: the launcher tints this layer's shape from the wallpaper; only its alpha counts. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Hull, bridge, tower, gun and mast, all inside the 66dp safe circle (at most 24dp from the center). -->
+    <path
+        android:fillColor="#FF000000"
+        android:pathData="M30,56H78L72,64H36Z" />
+    <path
+        android:fillColor="#FF000000"
+        android:pathData="M45.5,48H60.5A1.5,1.5 0 0 1 62,49.5V56H44V49.5A1.5,1.5 0 0 1 45.5,48Z" />
+    <path
+        android:fillColor="#FF000000"
+        android:pathData="M51,41H56A1,1 0 0 1 57,42V48H50V42A1,1 0 0 1 51,41Z" />
+    <path
+        android:fillColor="#FF000000"
+        android:pathData="M62,51H70.75A1.25,1.25 0 0 1 70.75,53.5H62Z" />
+    <path
+        android:fillColor="#FF000000"
+        android:pathData="M53,34H54.8V41H53Z" />
+    <!-- Waves, period 12, from 30 to 78: the ends stay about 29dp from the center. -->
+    <path
+        android:pathData="M30,71q3,-4.4 6,0t6,0t6,0t6,0t6,0t6,0t6,0t6,0"
+        android:strokeWidth="2.5"
+        android:strokeColor="#FF000000"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
+</vector>

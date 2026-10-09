@@ -159,3 +159,21 @@ data safety, content rating, audience 13+, ads / advertising-ID declarations; up
 - On your Moto and the emulators: placement drag / rotate / Random, every firing mode and size vs each AI level,
   pass-and-play covers, grid swap and auto-swap, hints, resign, daily, achievements, rotation, tablet phone view,
   themes, both languages, Scores, bug report (GitHub path only), ads and consent on `Pixel_9a_Android_16`.
+
+## Status (handoff, 2026-10-08)
+Done and merged: milestones 1–7 (PRs #1–#8), vinkit 0.6.0 and 0.7.0 (`vinkit.tag=0.7.0`). PR #9 (milestone 8, part 1:
+launcher icon + Roborazzi goldens) is open; merge it first.
+
+Next, milestone 8 part 2 (branch from `master` after #9 merges):
+1. TalkBack pass on an emulator (`Pixel_9a_Android_16`): on the Moto, `uiautomator` reported the target grid's cell
+   nodes about a cell off while touches and Robolectric bounds are right; find out whether TalkBack's
+   explore-by-touch reads the wrong cell, and fix it if so.
+2. pt-BR read-through on the phone (Settings → app language, not the system's).
+3. Tablet layouts on `Pixel_Tablet_Android_16` (phone view, landscape side by side).
+Then milestone 9: release prep (signing, `release.yml` off, privacy policy with the user, AdMob setup click by click,
+store kit), per `game-prompt-template.md` section 8.
+
+Device notes: the Moto changes orientation while tests drive it; find buttons by content description with
+`uiautomator dump` instead of fixed coordinates. Debug presets: `DebugGameActivity --es game near_win|near_loss|salvo_big|handover`.
+The user's rules from this project: the grids never swap (target big, own small); vinkit releases go straight to
+`master` + tag (no PR), then fetch JitPack's build.log.

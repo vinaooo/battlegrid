@@ -118,6 +118,14 @@ and their defaults, is `PLAN.md`.
 - Sounds: `app/src/main/res/raw/sfx_*.wav`, made by `python3 tools/sfx.py app/src/main/res/raw` (synthesized, no
   third-party audio), played by name through vinkit's `AndroidGameFeedback(sounds = …)`.
 
+## Icon and screenshots
+
+- Launcher icon: a warship on waves, white on the brand teal (`#FF006B5F`, vinkit's teal primary), with a separate
+  `ic_launcher_monochrome` layer for themed icons; every mark within the 66dp safe circle. No wallpaper color.
+- Roborazzi goldens: `app/src/test/screenshots/launcher_icon.png` and `feature/game/src/test/screenshots/game_*.png`
+  (placement, battle dark, 12×12 salvo, landscape, tablet phone view, pt-BR). Re-record with
+  `./gradlew recordRoborazziDebug` and look at the images before committing.
+
 ## Git
 
 Only `master` is long-lived: branch from it and open PRs against it; the user merges with merge commits. One PR per
