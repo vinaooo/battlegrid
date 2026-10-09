@@ -110,10 +110,11 @@ and their defaults, is `PLAN.md`.
   first, same AI fleet and AI random stream for everyone. The first daily finished or left mid-battle that day is
   ranked (`GameSession.recorded`); later ones are practice (no stats, scores or badges). `DailyRecord` keeps the last
   ranked day and the streak of days played in a row.
-- Badges: `Achievements.after` (pure) over `AchievementProgress` (unlocked + sizes and firing modes won), stored in
-  the settings DataStore (`achievements_*` keys, `Achievement` names: never rename). `FinishGame` returns the ones
-  just earned; the end dialog lists them. They have their own screen (`badges/`), opened by a button beside Scores
-  (vinkit 0.7.0 `GameFrame(navigation = …)`).
+- Badges: vinkit's (0.8.0): `AchievementProgress` and `DataStoreAchievementRepository` (settings DataStore,
+  `achievements_*` keys), `BadgesScreen`. The rules stay here: `Achievements.after` (pure), with typed views
+  `badges` / `sizesWon` / `firingsWon` (collected `sizes_won`, `firings_won`); `Achievement` names and those keys:
+  never rename. `FinishGame` returns the ones just earned; the end dialog lists them. Their screen (`badges/`) is
+  opened by a button beside Scores (vinkit 0.7.0 `GameFrame(navigation = …)`).
 - How to play opens by itself once (`GameSettings.howToPlaySeen`), and from the new-game menu.
 - Sounds: `app/src/main/res/raw/sfx_*.wav`, made by `python3 tools/sfx.py app/src/main/res/raw` (synthesized, no
   third-party audio), played by name through vinkit's `AndroidGameFeedback(sounds = …)`.

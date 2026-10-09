@@ -19,6 +19,7 @@ import io.github.vinaooo.battlegrid.domain.model.Phase
 import io.github.vinaooo.battlegrid.domain.model.Ship
 import io.github.vinaooo.battlegrid.domain.model.ShotResult
 import io.github.vinaooo.battlegrid.domain.model.Side
+import io.github.vinaooo.battlegrid.domain.model.badges
 import io.github.vinaooo.battlegrid.domain.repository.GameSettings
 import io.github.vinaooo.battlegrid.domain.rules.GameEngine
 import io.github.vinaooo.battlegrid.domain.session.GameSession
@@ -256,7 +257,7 @@ class GameViewModelTest {
         vm.uiState.value.ended shouldBe true
         vm.uiState.value.announcement shouldBe Announcement.Ended(Side.PLAYER, vsAi = true, resigned = false)
         played shouldBe listOf("sunk", "WIN")
-        vm.uiState.value.earned shouldBe achievements.current.value.unlocked
+        vm.uiState.value.earned shouldBe achievements.current.value.badges
         vm.uiState.value.earned.contains(io.github.vinaooo.battlegrid.domain.model.Achievement.FIRST_WIN) shouldBe true
         stats.stats.value shouldBe mapOf(GameMode.DEFAULT.key to GameStats(1, 1, 1, 1))
         savedGames.saved shouldBe null

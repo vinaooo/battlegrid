@@ -4,10 +4,13 @@ import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 import io.github.vinaooo.battlegrid.domain.model.Achievement
-import io.github.vinaooo.battlegrid.domain.model.AchievementProgress
 import io.github.vinaooo.battlegrid.domain.model.BoardSize
 import io.github.vinaooo.battlegrid.domain.model.FiringMode
+import io.github.vinaooo.battlegrid.domain.model.badges
+import io.github.vinaooo.battlegrid.domain.model.firingsWon
+import io.github.vinaooo.battlegrid.domain.model.sizesWon
 import io.github.vinaooo.battlegrid.domain.repository.DailyRecord
+import io.github.vinaooo.vinkit.achievements.DataStoreAchievementRepository
 import io.kotest.matchers.shouldBe
 import java.io.File
 import kotlinx.coroutines.flow.first
@@ -35,21 +38,16 @@ class DataStoreProgressRepositoriesTest {
     }
 
     @Test
-    fun `badges and their progress are kept`() = scope.runTest {
-        val progress = AchievementProgress(
-            setOf(Achievement.FIRST_WIN, Achievement.BEAT_HARD),
-            setOf(BoardSize.EIGHT),
-            setOf(FiringMode.SALVO),
-        )
-        DataStoreAchievementRepository(store).progress.first() shouldBe AchievementProgress()
-        DataStoreAchievementRepository(store).update { progress }
-        DataStoreAchievementRepository(store).progress.first() shouldBe progress
-    }
-
-    @Test
-    fun `a badge from a newer version is skipped, the rest kept`() = scope.runTest {
-        store.edit { it[stringSetPreferencesKey("achievements_unlocked")] = setOf("FIRST_WIN", "MOON_LANDING") }
-        DataStoreAchievementRepository(store).progress.first().unlocked shouldBe setOf(Achievement.FIRST_WIN)
+    fun `badges BattleGrid saved before vinkit kept them still load, unknown ones skipped`() = scope.runTest {
+        store.edit {
+            it[stringSetPreferencesKey("achievements_unlocked")] = setOf("FIRST_WIN", "MOON_LANDING")
+            it[stringSetPreferencesKey("achievements_sizes_won")] = setOf("EIGHT")
+            it[stringSetPreferencesKey("achievements_firings_won")] = setOf("SALVO")
+        }
+        val progress = DataStoreAchievementRepository(store).progress.first()
+        progress.badges shouldBe setOf(Achievement.FIRST_WIN)
+        progress.sizesWon shouldBe setOf(BoardSize.EIGHT)
+        progress.firingsWon shouldBe setOf(FiringMode.SALVO)
     }
 
     @Test

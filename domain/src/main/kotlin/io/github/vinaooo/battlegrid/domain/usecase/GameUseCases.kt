@@ -7,7 +7,6 @@ import io.github.vinaooo.battlegrid.domain.model.GameState
 import io.github.vinaooo.battlegrid.domain.model.Side
 import io.github.vinaooo.battlegrid.domain.placement.FleetPlacer
 import io.github.vinaooo.battlegrid.domain.placement.RandomFleetPlacer
-import io.github.vinaooo.battlegrid.domain.repository.AchievementRepository
 import io.github.vinaooo.battlegrid.domain.repository.Clock
 import io.github.vinaooo.battlegrid.domain.repository.DailyRecord
 import io.github.vinaooo.battlegrid.domain.repository.DailyRepository
@@ -17,10 +16,12 @@ import io.github.vinaooo.battlegrid.domain.repository.SeedSource
 import io.github.vinaooo.battlegrid.domain.rules.GameEngine
 import io.github.vinaooo.battlegrid.domain.rules.ShotsScoring
 import io.github.vinaooo.battlegrid.domain.session.GameSession
+import io.github.vinaooo.vinkit.core.AchievementRepository
 import io.github.vinaooo.vinkit.core.GameStats
 import io.github.vinaooo.vinkit.core.ScoreRecord
 import io.github.vinaooo.vinkit.core.ScoreRepository
 import io.github.vinaooo.vinkit.core.StatsRepository
+import io.github.vinaooo.vinkit.core.unlock
 import kotlin.random.Random
 import kotlinx.coroutines.flow.first
 
@@ -57,11 +58,8 @@ class RecordProgress(
 
     /** Badges after [state], a finished game against the AI; returns the ones just earned. */
     suspend fun achievements(state: GameState, streak: Int, dailyStreak: Int?): Set<Achievement> {
-        var earned = emptySet<Achievement>()
-        achievements.update { before ->
-            Achievements.after(before, state, streak, dailyStreak).also { earned = it.unlocked - before.unlocked }
-        }
-        return earned
+        val earned = achievements.unlock { Achievements.after(it, state, streak, dailyStreak) }
+        return Achievement.entries.filter { it.name in earned }.toSet()
     }
 }
 

@@ -112,8 +112,6 @@
     <string name="tab_daily">Daily</string>
     <string name="badges">Badges</string>
     <string name="new_badge">New badge: %1$s</string>
-    <string name="badge_locked">%1$s, locked: %2$s</string>
-    <string name="badge_unlocked">%1$s, earned: %2$s</string>
     <string name="badge_first_win">First win</string>
     <string name="badge_first_win_note">Win a game against the phone</string>
     <string name="badge_every_size">All waters</string>

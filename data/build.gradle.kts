@@ -14,6 +14,7 @@ dependencies {
     implementation(project(":domain"))
     api("com.github.vinaooo.vinkit:settings:$vinkit")
     api("com.github.vinaooo.vinkit:scores:$vinkit")
+    api("com.github.vinaooo.vinkit:achievements:$vinkit")
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.kotlinx.coroutines.core)
