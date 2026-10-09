@@ -5,7 +5,9 @@
         android:name=".BattleGridApplication"
         android:allowBackup="true"
         android:appCategory="game"
+        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/Theme.BattleGrid">
         <!-- Set per build type by the vinkit.android.application plugin: Google's test app ID in debug builds. -->
