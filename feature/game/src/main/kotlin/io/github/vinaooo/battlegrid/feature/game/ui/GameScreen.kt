@@ -53,6 +53,7 @@ import io.github.vinaooo.battlegrid.feature.game.board.BattleBoard
 import io.github.vinaooo.battlegrid.feature.game.board.PlacementBoard
 import io.github.vinaooo.battlegrid.feature.game.board.ProvideBoardColors
 import io.github.vinaooo.battlegrid.feature.game.gameReport
+import io.github.vinaooo.vinkit.achievements.R as AchievementsR
 import io.github.vinaooo.vinkit.bugreport.ReportTarget
 import io.github.vinaooo.vinkit.core.formatElapsed
 import io.github.vinaooo.vinkit.shell.FrameInfo
@@ -140,7 +141,9 @@ fun GameScreen(
             onOpenSettings = onOpenSettings,
             boardAspectRatio = null,
             navigation = listOfNotNull(
-                onOpenBadges?.let { NavigationAction(Icons.Rounded.MilitaryTech, stringResource(R.string.badges), it) },
+                onOpenBadges?.let {
+                    NavigationAction(Icons.Rounded.MilitaryTech, stringResource(AchievementsR.string.vinkit_badges), it)
+                },
             ),
         )
     }
@@ -226,8 +229,12 @@ private fun Toolbar(
     GameToolbar(
         actions = actions,
         menuOptions = listOfNotNull(
-            MenuOption(Icons.Rounded.Replay, stringResource(R.string.new_game)) { onIntent(GameIntent.NewGame) },
-            MenuOption(Icons.Rounded.RestartAlt, stringResource(R.string.restart)) { onIntent(GameIntent.Restart) },
+            MenuOption(Icons.Rounded.Replay, stringResource(ShellR.string.vinkit_new_game)) {
+                onIntent(GameIntent.NewGame)
+            },
+            MenuOption(Icons.Rounded.RestartAlt, stringResource(ShellR.string.vinkit_restart)) {
+                onIntent(GameIntent.Restart)
+            },
             if (battle) {
                 MenuOption(Icons.AutoMirrored.Rounded.ExitToApp, stringResource(R.string.resign)) {
                     onIntent(GameIntent.Resign)
@@ -297,7 +304,7 @@ private fun EndDialog(uiState: GameUiState, onNewGame: () -> Unit) {
         add(modeName(state.mode, checkNotNull(uiState.session).recorded))
         add(pluralStringResource(R.plurals.shots_count, shots, shots))
         add(stringResource(R.string.accuracy, accuracy))
-        add(stringResource(R.string.time, formatElapsed(state.elapsedSeconds)))
+        add(stringResource(ShellR.string.vinkit_win_time, formatElapsed(state.elapsedSeconds)))
         if (vsAi) {
             val hints = state.hintsUsed
             add(
@@ -308,7 +315,7 @@ private fun EndDialog(uiState: GameUiState, onNewGame: () -> Unit) {
                 },
             )
         }
-        uiState.earned.forEach { add(stringResource(R.string.new_badge, badgeName(it))) }
+        uiState.earned.forEach { add(stringResource(AchievementsR.string.vinkit_new_badge, badgeName(it))) }
     }
     WinDialog(
         lines = lines,

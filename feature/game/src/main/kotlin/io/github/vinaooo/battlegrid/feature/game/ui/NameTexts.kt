@@ -9,6 +9,8 @@ import io.github.vinaooo.battlegrid.domain.model.Opponent
 import io.github.vinaooo.battlegrid.domain.model.ShipClass
 import io.github.vinaooo.battlegrid.domain.model.Side
 import io.github.vinaooo.battlegrid.feature.game.R
+import io.github.vinaooo.vinkit.achievements.R as AchievementsR
+import io.github.vinaooo.vinkit.designsystem.R as DesignR
 
 @Composable
 internal fun shipName(type: ShipClass): String = stringResource(
@@ -34,9 +36,9 @@ internal fun firingName(firing: FiringMode): String = stringResource(
 @Composable
 internal fun opponentName(opponent: Opponent): String = stringResource(
     when (opponent) {
-        Opponent.EASY -> R.string.opponent_easy
-        Opponent.MEDIUM -> R.string.opponent_medium
-        Opponent.HARD -> R.string.opponent_hard
+        Opponent.EASY -> DesignR.string.vinkit_difficulty_easy
+        Opponent.MEDIUM -> DesignR.string.vinkit_difficulty_medium
+        Opponent.HARD -> DesignR.string.vinkit_difficulty_hard
         Opponent.TWO_PLAYER -> R.string.opponent_two_player
     },
 )
@@ -69,7 +71,7 @@ private val badgeTexts = mapOf(
     Achievement.WIN_EVERY_SIZE to (R.string.badge_every_size to R.string.badge_every_size_note),
     Achievement.WIN_EVERY_FIRING to (R.string.badge_every_firing to R.string.badge_every_firing_note),
     Achievement.BEAT_HARD to (R.string.badge_beat_hard to R.string.badge_beat_hard_note),
-    Achievement.NO_HINT_WIN to (R.string.badge_no_hints to R.string.badge_no_hints_note),
+    Achievement.NO_HINT_WIN to (AchievementsR.string.vinkit_badge_no_hints to R.string.badge_no_hints_note),
     Achievement.CLEAN_SINK to (R.string.badge_clean_sink to R.string.badge_clean_sink_note),
     Achievement.WIN_STREAK_5 to (R.string.badge_streak to R.string.badge_streak_note),
     Achievement.DAILY_STREAK_7 to (R.string.badge_daily_streak to R.string.badge_daily_streak_note),

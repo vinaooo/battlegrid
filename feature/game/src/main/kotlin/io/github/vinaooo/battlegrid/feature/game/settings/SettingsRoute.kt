@@ -23,6 +23,7 @@ import io.github.vinaooo.vinkit.settings.Choice
 import io.github.vinaooo.vinkit.settings.IconChoice
 import io.github.vinaooo.vinkit.settings.IconOption
 import io.github.vinaooo.vinkit.settings.NewGameConfirmDialog
+import io.github.vinaooo.vinkit.settings.R as SettingsR
 import io.github.vinaooo.vinkit.settings.SettingsScreen
 import io.github.vinaooo.vinkit.settings.SettingsSection
 
@@ -47,7 +48,9 @@ fun SettingsRoute(
         onOpenPrivacyPolicy = { uriHandler.openUri(privacyPolicyUrl) },
         modifier = modifier,
         gameSections = listOf(
-            SettingsSection(stringResource(R.string.section_game)) { GameSection(game.mode, viewModel::onModeChange) },
+            SettingsSection(stringResource(SettingsR.string.vinkit_section_game)) {
+                GameSection(game.mode, viewModel::onModeChange)
+            },
         ),
         privacyOptionsRequired = privacyOptionsRequired,
         onOpenPrivacyOptions = onOpenPrivacyOptions,
