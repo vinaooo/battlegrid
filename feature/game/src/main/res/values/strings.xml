@@ -4,9 +4,6 @@
     <string name="firing_classic">Classic</string>
     <string name="firing_hit_again">Hit again</string>
     <string name="firing_salvo">Salvo</string>
-    <string name="opponent_easy">Easy</string>
-    <string name="opponent_medium">Medium</string>
-    <string name="opponent_hard">Hard</string>
     <string name="opponent_two_player">2 players</string>
     <string name="daily">Daily challenge</string>
     <string name="mode_name" translatable="false">%1$s · %2$s · %3$s</string>
@@ -33,16 +30,13 @@
         <item quantity="one">Mark %d shot</item>
         <item quantity="other">Mark %d shots</item>
     </plurals>
-    <string name="you_won">You won</string>
     <string name="you_lost">You lost</string>
-    <string name="player_won">%1$s wins</string>
+    <string name="player_won">%1$s wins!</string>
 
     <!-- Toolbar and menu -->
     <string name="random_fleet">Random</string>
     <string name="start_battle">Start</string>
     <string name="fire">Fire</string>
-    <string name="new_game">New game</string>
-    <string name="restart">Restart this board</string>
     <string name="resign">Resign</string>
 
     <!-- Cover -->
@@ -55,7 +49,6 @@
         <item quantity="other">%d shots</item>
     </plurals>
     <string name="accuracy">Accuracy %1$d%%</string>
-    <string name="time">Time %1$s</string>
     <string name="no_hints">No hints</string>
     <plurals name="hints_count">
         <item quantity="one">%d hint (+5 shots)</item>
@@ -91,7 +84,6 @@
     <string name="place_on_grid">Place on the grid</string>
 
     <!-- Settings and Scores -->
-    <string name="section_game">Game</string>
     <string name="board">Board</string>
     <string name="firing">Firing</string>
     <string name="opponent">Opponent</string>
@@ -110,8 +102,6 @@
     <string name="daily_practice">Daily challenge · practice</string>
     <string name="how_to_play">How to play</string>
     <string name="tab_daily">Daily</string>
-    <string name="badges">Badges</string>
-    <string name="new_badge">New badge: %1$s</string>
     <string name="badge_first_win">First win</string>
     <string name="badge_first_win_note">Win a game against the phone</string>
     <string name="badge_every_size">All waters</string>
@@ -120,7 +110,6 @@
     <string name="badge_every_firing_note">Win in Classic, Hit again and Salvo</string>
     <string name="badge_beat_hard">Admiral</string>
     <string name="badge_beat_hard_note">Beat Hard</string>
-    <string name="badge_no_hints">On your own</string>
     <string name="badge_no_hints_note">Win without hints</string>
     <string name="badge_clean_sink">Clean sink</string>
     <string name="badge_clean_sink_note">Sink a ship with no miss between its hits</string>

@@ -2,9 +2,6 @@
     <string name="firing_classic">Clássico</string>
     <string name="firing_hit_again">Tiro extra</string>
     <string name="firing_salvo">Salva</string>
-    <string name="opponent_easy">Fácil</string>
-    <string name="opponent_medium">Médio</string>
-    <string name="opponent_hard">Difícil</string>
     <string name="opponent_two_player">2 jogadores</string>
     <string name="daily">Desafio diário</string>
 
@@ -22,23 +19,20 @@
     <string name="player_place_fleet">%1$s, posicione sua frota</string>
     <string name="your_turn">Sua vez</string>
     <string name="enemy_turn">Inimigo atirando</string>
-    <string name="player_turn">Vez do %1$s</string>
+    <string name="player_turn">Vez de %1$s</string>
     <plurals name="salvo_shots">
         <item quantity="one">Marque %d tiro</item>
         <item quantity="other">Marque %d tiros</item>
     </plurals>
-    <string name="you_won">Você venceu</string>
     <string name="you_lost">Você perdeu</string>
-    <string name="player_won">%1$s venceu</string>
+    <string name="player_won">%1$s venceu!</string>
 
     <string name="random_fleet">Aleatório</string>
     <string name="start_battle">Começar</string>
     <string name="fire">Fogo</string>
-    <string name="new_game">Novo jogo</string>
-    <string name="restart">Reiniciar este tabuleiro</string>
     <string name="resign">Desistir</string>
 
-    <string name="pass_phone">Passe o celular para o %1$s</string>
+    <string name="pass_phone">Passe o celular para %1$s</string>
     <string name="tap_to_start">Toque para começar</string>
 
     <plurals name="shots_count">
@@ -46,7 +40,6 @@
         <item quantity="other">%d tiros</item>
     </plurals>
     <string name="accuracy">Precisão %1$d%%</string>
-    <string name="time">Tempo %1$s</string>
     <string name="no_hints">Nenhuma dica</string>
     <plurals name="hints_count">
         <item quantity="one">%d dica (+5 tiros)</item>
@@ -78,7 +71,6 @@
     <string name="rotate">Girar</string>
     <string name="place_on_grid">Colocar na grade</string>
 
-    <string name="section_game">Jogo</string>
     <string name="board">Tabuleiro</string>
     <string name="firing">Disparo</string>
     <string name="opponent">Adversário</string>
@@ -86,7 +78,7 @@
     <string name="opponent_medium_note">Atira ao acaso até acertar, depois afunda esse navio</string>
     <string name="opponent_hard_note">Mira onde ainda cabem navios, em xadrez</string>
     <string name="opponent_two_player_note">Duas pessoas neste celular, passando-o a cada vez</string>
-    <string name="new_game_not_counted">Isto vai começar um novo jogo. O jogo atual será perdido.</string>
+    <string name="new_game_not_counted">Isso vai começar uma nova partida. A partida atual será perdida.</string>
     <string name="privacy_policy_url">https://vinaooo.github.io/battlegrid/privacy.html#pt-br</string>
     <plurals name="hints_used">
         <item quantity="one">%d dica</item>
@@ -95,22 +87,19 @@
     <string name="daily_practice">Desafio diário · treino</string>
     <string name="how_to_play">Como jogar</string>
     <string name="tab_daily">Diário</string>
-    <string name="badges">Medalhas</string>
-    <string name="new_badge">Nova medalha: %1$s</string>
     <string name="badge_first_win">Primeira vitória</string>
-    <string name="badge_first_win_note">Vença um jogo contra o celular</string>
+    <string name="badge_first_win_note">Vença uma partida contra o celular</string>
     <string name="badge_every_size">Todos os mares</string>
     <string name="badge_every_size_note">Vença no 8×8, no 10×10 e no 12×12</string>
     <string name="badge_every_firing">Todos os disparos</string>
     <string name="badge_every_firing_note">Vença no Clássico, no Tiro extra e na Salva</string>
     <string name="badge_beat_hard">Almirante</string>
     <string name="badge_beat_hard_note">Vença o Difícil</string>
-    <string name="badge_no_hints">Por conta própria</string>
     <string name="badge_no_hints_note">Vença sem dicas</string>
     <string name="badge_clean_sink">Afundamento limpo</string>
     <string name="badge_clean_sink_note">Afunde um navio sem errar entre os acertos nele</string>
     <string name="badge_streak">Embalado</string>
-    <string name="badge_streak_note">Vença 5 jogos seguidos num modo</string>
+    <string name="badge_streak_note">Vença 5 partidas seguidas num modo</string>
     <string name="badge_daily_streak">Todo dia</string>
     <string name="badge_daily_streak_note">Jogue o desafio diário 7 dias seguidos</string>
     <string name="badge_accuracy">Atirador de elite</string>
@@ -126,9 +115,9 @@
     <string name="howto_salvo">Salva</string>
     <string name="howto_salvo_text">Marque um tiro por navio seu ainda à tona e toque em Fogo. Quem perde navios atira menos.</string>
     <string name="howto_hints">Dicas e pontuação</string>
-    <string name="howto_hints_text">Uma dica marca cinco casas: uma delas tem um navio. Até 3 por jogo, cada uma soma 5 tiros à pontuação. Menos tiros ficam mais alto no ranking.</string>
+    <string name="howto_hints_text">Uma dica marca cinco casas: uma delas tem um navio. Até 3 por partida, cada uma soma 5 tiros à pontuação. Menos tiros ficam mais alto no ranking.</string>
     <string name="howto_daily">Desafio diário</string>
-    <string name="howto_daily_text">O mesmo tabuleiro para todos a cada dia: 10×10, Clássico, contra o Difícil. Seu primeiro jogo do dia é o que conta.</string>
+    <string name="howto_daily_text">O mesmo tabuleiro para todos a cada dia: 10×10, Clássico, contra o Difícil. Sua primeira partida do dia é a que conta.</string>
     <string name="howto_two_players">2 jogadores</string>
     <string name="howto_two_players_text">Passem o celular a cada vez: a tela fica escondida até o próximo jogador tocar.</string>
 </resources>

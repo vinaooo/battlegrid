@@ -13,6 +13,7 @@ import io.github.vinaooo.battlegrid.domain.rules.SalvoFiring
 import io.github.vinaooo.battlegrid.feature.game.Announcement
 import io.github.vinaooo.battlegrid.feature.game.GameUiState
 import io.github.vinaooo.battlegrid.feature.game.R
+import io.github.vinaooo.vinkit.shell.R as ShellR
 
 /** A cell's name: its column letter and row number, "B7". */
 internal fun cellName(coord: Coord): String = "${'A' + coord.col}${coord.row + 1}"
@@ -40,7 +41,7 @@ internal fun turnText(ui: GameUiState): String {
 @Composable
 internal fun resultText(winner: Side, vsAi: Boolean): String = when {
     !vsAi -> stringResource(R.string.player_won, playerName(winner))
-    winner == Side.PLAYER -> stringResource(R.string.you_won)
+    winner == Side.PLAYER -> stringResource(ShellR.string.vinkit_you_won)
     else -> stringResource(R.string.you_lost)
 }
 
