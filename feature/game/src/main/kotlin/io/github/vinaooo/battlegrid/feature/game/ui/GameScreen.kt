@@ -13,8 +13,8 @@ import androidx.compose.material.icons.automirrored.rounded.HelpOutline
 import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material.icons.rounded.Lightbulb
 import androidx.compose.material.icons.rounded.MilitaryTech
+import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material.icons.rounded.Replay
-import androidx.compose.material.icons.rounded.RestartAlt
 import androidx.compose.material.icons.rounded.Shuffle
 import androidx.compose.material.icons.rounded.Today
 import androidx.compose.material.icons.rounded.TrackChanges
@@ -232,7 +232,7 @@ private fun Toolbar(
             MenuOption(Icons.Rounded.Replay, stringResource(ShellR.string.vinkit_new_game)) {
                 onIntent(GameIntent.NewGame)
             },
-            MenuOption(Icons.Rounded.RestartAlt, stringResource(ShellR.string.vinkit_restart)) {
+            MenuOption(Icons.Rounded.Refresh, stringResource(ShellR.string.vinkit_restart)) {
                 onIntent(GameIntent.Restart)
             },
             if (battle) {
