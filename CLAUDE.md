@@ -15,7 +15,8 @@ and their defaults, is `PLAN.md`.
 - applicationId and package `io.github.vinaooo.battlegrid`; app name "BattleGrid" (`app_name`); brand color teal.
 - Built on **vinkit** (`../vinkit`, github.com/vinaooo/vinkit): build-logic plugins (`vinkit.*`), the version
   catalog, theme, ads, bug report, settings, scores and the game screen shell come from it. OX Play (`../xo`) is the
-  reference for wiring vinkit (the first game built on it); no game is a visual reference *(user, 2026-10-09)*.
+  reference for wiring vinkit (the first game built on it); Solo and Sudoku Trio are the visual reference for the
+  shared surfaces *(user, 2026-10-10)*.
   - Always the newest published vinkit tag (`vinkit.tag` in `gradle.properties`), from JitPack; never a local
     `includeBuild` of vinkit (user's rule).
   - A kit gap found here is fixed in vinkit, released as a new tag, and then used here. Never bump the other games.
@@ -110,7 +111,7 @@ and their defaults, is `PLAN.md`.
   first, same AI fleet and AI random stream for everyone. The first daily finished or left mid-battle that day is
   ranked (`GameSession.recorded`); later ones are practice (no stats, scores or badges). `DailyRecord` keeps the last
   ranked day and the streak of days played in a row.
-- Badges: vinkit's (0.8.0): `AchievementProgress` and `DataStoreAchievementRepository` (settings DataStore,
+- Badges: vinkit's: `AchievementProgress` and `DataStoreAchievementRepository` (settings DataStore,
   `achievements_*` keys), `BadgesScreen`. The rules stay here: `Achievements.after` (pure), with typed views
   `badges` / `sizesWon` / `firingsWon` (collected `sizes_won`, `firings_won`); `Achievement` names and those keys:
   never rename. `FinishGame` returns the ones just earned; the end dialog lists them. Their screen (`badges/`) is
